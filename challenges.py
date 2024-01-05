@@ -5,8 +5,8 @@ def iniciarFiles():
     nameFile.close()
     subdivisionsFile= open(".spacedRepetition/data/challenges/subdivisions.txt","a",encoding="utf-8")
     subdivisionsFile.close()
-    exercisefiles = open(".spacedRepetition/data/challenges/problems.txt","a",encoding="utf-8")
-    exercisefiles.close()
+    problemFile = open(".spacedRepetition/data/challenges/problems.txt","a",encoding="utf-8")
+    problemFile.close()
 def checkChallenges(materials):
     for material in materials:
     #verifies if there are as many sections as exercises per section
@@ -20,39 +20,39 @@ def integerStringCheck(checkedString:str):
         return False
     return True
 def saveChallenges(materials):
-    if not verifyIfValid(mateials):
+    if not checkChallenges(mateials):
         return False
-    #Escreva os nomes
-    fileNomesDosDesafios = open(".NomesDosDesafios.txt","w",encoding="utf-8")
-    for index in range(len(materiais)):
-        fileNomesDosDesafios.write(materiais[index]["nome"])
-        if index+1<len(materiais):
-            fileNomesDosDesafios.write("\n")
-    fileNomesDosDesafios.close()
-    #Escreva as subdivisões
-    fileSubdivisoes = open(".DesafiosSubdivisoes.txt","w",encoding="utf-8")
-    for index in range(len(materiais)):
-        subdivisoesPH=""
-        for indexPrime in range(len(materiais[index]["subdivisoes"])):
-            subdivisoesPH+=materiais[index]["subdivisoes"][indexPrime]
-            if indexPrime+1<len(materiais[index]["subdivisoes"]):
-                subdivisoesPH+="@"
-        fileSubdivisoes.write(subdivisoesPH)
-        if index+1<len(materiais):
-            fileSubdivisoes.write("\n")
-    fileSubdivisoes.close()
-    #Escreva o número de exercícios de cada subdivisão
-    fileExercicios = open(".DesafiosExercicios.txt","w",encoding="utf-8")
-    for index in range(len(materiais)):
-        exerciciosPH=""
-        for indexPrime in range(len(materiais[index]["exercicios"])):
-            exerciciosPH+=str(materiais[index]["exercicios"][indexPrime])
-            if indexPrime+1<len(materiais[index]["exercicios"]):
-                exerciciosPH+=" "
-        fileExercicios.write(exerciciosPH)
-        if index+1<len(materiais):
-            fileExercicios.write("\n")
-    fileExercicios.close()
+    #write the names
+    nameFile = open(".spacedRepetition/data/challenges/names.txt","w",encoding="utf-8")
+    for index in range(len(materials)):
+        nameFile.write(materials[index]["name"])
+        if index+1<len(materials):
+            nameFile.write("\n")
+    nameFile.close()
+    #write the subdivisions
+    subdivisionsFile= open(".spacedRepetition/data/challenges/subdivisions.txt","a",encoding="utf-8")
+    for index in range(len(materials)):
+        subdivisionsPH=""
+        for indexPrime in range(len(materials[index]["subdivisions"])):
+            subdivisionsPH+=materials[index]["subdivision"][indexPrime]
+            if indexPrime+1<len(materials[index]["subdivisios"]):
+                subdivisionsPH+="@"
+        subdivisionFile.write(subdivisionsPH)
+        if index+1<len(materials):
+            subdivisionFile.write("\n")
+    subdivisionFile.close()
+    #Write the number of problem
+    problemFile = open(".spacedRepetition/data/challenges/problems.txt","a",encoding="utf-8")
+    for index in range(len(materials)):
+        problem=""
+        for indexPrime in range(len(materials[index]["exercise"])):
+            probllemPH+=str(materials[index]["exercise"][indexPrime])
+            if indexPrime+1<len(materials[index]["exercise"]):
+                problemPH+=" "
+        problemFile.write(problemPH)
+        if index+1<len(materials):
+            problemFile.write("\n")
+    problemFile.close()
     return False
 
 def ConseguirDesafios():
