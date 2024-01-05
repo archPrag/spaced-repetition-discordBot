@@ -1,0 +1,19 @@
+***Conceitos***
+***Exercício numérico***:Exercício com uma resposta de número único, como 1.79 ou 194, o bot verficará a congruência do resultado
+***Exercício Teórico***:Exercício com uma resposta subjetiva que será pedido para o usuário verificar se está correto.
+***Algarismos significativos***:Ao adicionar um exercício numérico o número de caracteres importa , caso for digitado 1 na hora de adicionar o exercício as respostas 1.1 e 0.9 estarão corretas.No entanto, caso 1.0 for digitado as respostas 1.1 e 0.9 não serão válidas. Em suma,em caso de decimais, o computador verificará até o último algarismo digitado depois da vígula. No caso de inteiros, aceitará qualquer resposta ignorando os decimais.
+***Índice***:Número dado ao exercício obtido no "!List".
+***Caixas 0,1,2,3***: Caixas que serão tomadas a cada 1,2,4,7 dias, se o exercío for acertado ele sobe de caixa, caso contrário, ele desce
+***Caixa 4***:Caixa final.
+
+
+***Comandos***
+***!Can***:Cancela o que estiver acontecendo como reiniciar o bot.
+***!list***:lista todos os exercícios não terminados
+***!ListAll***:Lista todos os exercícios gravados terminados ou não.
+***!Exercise***:Inicia a repetição espaçada.
+***!GenExercise***:Busca um exercício de um livro pre programado
+***!NA_Enunciado***:Começa a adicionar um exercício numérico com o enunciado depois do espaço.
+***!TA_Enunciado***:Começa a adicionar um exercício teórico com enunciado depois do espaço.
+***!ND_Índice***:Deleta o exercício numérico com o índice fornecido.
+***!TD_Índice***:Deleta o exercício teórico com o índice fornecido.

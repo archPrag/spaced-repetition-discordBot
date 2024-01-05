@@ -1,0 +1,16 @@
+#my spaced repetition problems .txt
+.dadosNumericos.txt
+.dadosTeoricos.txt
+.dadosTeoricos.txt
+.enunciadosNumericos.txt
+.enunciadosTeoricos.txt
+.gabaritosTeoricos.txt
+#My randomized chalanges problems .txt
+.DesafiosExercicios.txt
+.DesafiosSubdivisoes.txt
+.NomesDosDesafios.txt
+#Api key for discord
+.env
+#Python file's
+__pycache__/
+bot-venv/
