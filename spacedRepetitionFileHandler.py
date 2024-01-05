@@ -104,53 +104,60 @@ def getTheoreticalProblems():
         return []
 
 
-def saveNumericProblems(numericProblems):
+def saveNumericProblems(problems):
     numericQuestionFile = open(
         ".spacedRepetition/data/numericQuestions", "w", encoding="utf-8"
     )
     numericDataFile = open(".spacedRepetition/data/numericData", "w", encoding="utf-8")
     # writes every information in its respective file
-    for index in range(len(numericProblems)):
-        problem = numericProblems[index]
-        numericQuestionFile.write(problem["enunciado"])
+    for index in range(len(problems)):
+        problem = problems[index]
+        numericQuestionFile.write(problem["question"])
         numericDataFile.write(
-            str(problem["caixa"])
+            str(problem["box"])
             + " "
-            + str(problem["gabarito"])
+            + str(problem["answer"])
             + " "
-            + str(problem["certeza"])
+            + str(problem["significantFigures"])
             + " "
-            + str(problem["ultimaAbertura"])
+            + str(problem["lastOpened"])
             + " "
-            + str(problem["erros"])
+            + str(problem["errors"])
         )
-        if index + 1 < len(numericProblems):
+        if index + 1 < len(problems):
             numericQuestionFile.write("\n")
             numericQuestionFile.write("\n")
     numericQuestionFile.close()
     numericDataFile.close()
 
 
-def salvarExerciciosTeoricos(exerciciosAAdicionar):
-    fileEnunciadosTeoricos = open(".enunciadosTeoricos.txt", "w", encoding="utf-8")
-    fileDadosTeoricos = open(".dadosTeoricos.txt", "w", encoding="utf-8")
-    fileGabaritoTeoricos = open(".gabaritosTeoricos.txt", "w", encoding="utf-8")
-    for index in range(len(exerciciosAAdicionar)):
-        fileEnunciadosTeoricos.write(exerciciosAAdicionar[index]["enunciado"])
-        fileDadosTeoricos.write(
-            str(exerciciosAAdicionar[index]["caixa"])
+def saveTheoreticalExercise(problems):
+    theoreticalQuestionFile = open(
+        ".spacedRepetition/data/teoricQuestions", "w", encoding="utf-8"
+    )
+    theoreticalDataFile = open(
+        ".spacedRepetition/data/teoricData", "w", encoding="utf-8"
+    )
+    theoreticalAnswerFile = open(
+        ".spacedRepetition/data/teoricAnswers", "w", encoding="utf-8"
+    )
+    for index in range(len(problems)):
+        theoreticalQuestionFile.write(problems[index]["question"])
+        theoreticalDataFile.write(
+            str(problems[index]["box"])
             + " "
-            + str(exerciciosAAdicionar[index]["ultimaAbertura"])
+            + str(problems[index]["lastOpened"])
             + " "
-            + str(exerciciosAAdicionar[index]["erros"])
+            + str(problems[index]["errors"])
         )
-        fileGabaritoTeoricos.write(exerciciosAAdicionar[index]["gabarito"])
-        if index + 1 < len(exerciciosAAdicionar):
-            fileEnunciadosTeoricos.write("\n")
-            fileDadosTeoricos.write("\n")
-            fileGabaritoTeoricos.write("\n")
-    fileDadosTeoricos.close()
-    fileDadosTeoricos.close()
+        theoreticalAnswerFile.write(problems[index]["answer"])
+        if index + 1 < len(problems):
+            theoreticalQuestionFile.write("\n")
+            theoreticalDataFile.write("\n")
+            theoreticalAnswerFile.write("\n")
+    theoreticalAnswerFile.close()
+    theoreticalQuestionFile.close()
+    theoreticalDataFile.close()
 
 
 def adicionarExercicioNumerico(enunciado, gabarito, certeza, exerciciosAtuais):
