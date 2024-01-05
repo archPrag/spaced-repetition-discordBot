@@ -1,4 +1,4 @@
-***Conceitos***
+###Conceitos###
 ***Exercício numérico***:Exercício com uma resposta de número único, como 1.79 ou 194, o bot verficará a congruência do resultado
 ***Exercício Teórico***:Exercício com uma resposta subjetiva que será pedido para o usuário verificar se está correto.
 ***Algarismos significativos***:Ao adicionar um exercício numérico o número de caracteres importa , caso for digitado 1 na hora de adicionar o exercício as respostas 1.1 e 0.9 estarão corretas.No entanto, caso 1.0 for digitado as respostas 1.1 e 0.9 não serão válidas. Em suma,em caso de decimais, o computador verificará até o último algarismo digitado depois da vígula. No caso de inteiros, aceitará qualquer resposta ignorando os decimais.
