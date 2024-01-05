@@ -12,7 +12,7 @@ def iniciarFiles():
     fileEnunciadosTeoricos.close()
     fileDadosTeoricos.close()
     fileGabaritosTeoricos.close()
-    fileAjuda = open("ajuda.txt","a",encoding="utf-8")
+    fileAjuda = open("help.txt","a",encoding="utf-8")
     fileAjuda.close
 def obterExerciciosNumericos():
     fileEnunciadosNumericos = open(".enunciadosNumericos.txt","r",encoding="utf-8")
@@ -157,7 +157,7 @@ def listarExerciciosIncompletos():
     return exerciciosListados
 def conseguirAjuda():
     #Leia o que está escrito em ajuda.txt
-    fileAjuda=open("ajuda.txt","r",encoding="utf-8")
+    fileAjuda=open("help.txt","r",encoding="utf-8")
     textoDeAjuda=fileAjuda.read()
     fileAjuda.close()
     return textoDeAjuda

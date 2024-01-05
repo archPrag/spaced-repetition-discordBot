@@ -1,19 +1,20 @@
-###Conceitos###
-***Exercício numérico***:Exercício com uma resposta de número único, como 1.79 ou 194, o bot verficará a congruência do resultado
-***Exercício Teórico***:Exercício com uma resposta subjetiva que será pedido para o usuário verificar se está correto.
-***Algarismos significativos***:Ao adicionar um exercício numérico o número de caracteres importa , caso for digitado 1 na hora de adicionar o exercício as respostas 1.1 e 0.9 estarão corretas.No entanto, caso 1.0 for digitado as respostas 1.1 e 0.9 não serão válidas. Em suma,em caso de decimais, o computador verificará até o último algarismo digitado depois da vígula. No caso de inteiros, aceitará qualquer resposta ignorando os decimais.
-***Índice***:Número dado ao exercício obtido no "!List".
-***Caixas 0,1,2,3***: Caixas que serão tomadas a cada 1,2,4,7 dias, se o exercío for acertado ele sobe de caixa, caso contrário, ele desce
-***Caixa 4***:Caixa final.
+### Program phylosophy###
+*** Numeric exercise ***:Exercise mostly found in math where you have to input a number and if this number is too far from the actual anwer the entire solution is wrong.
+*** Theoretical exercise ***:Exercise that has an answer that has to be human verified like text a math function ,... .
+*** Significant figures***: This program only verifies the number until the last decimal figure.If you input 0.9 in !NA it will consider any value from 1.0 to 0.8 valid in !Exercise.
+*** Index ***:Number given to the exercise in !List or !ListAll.
+*** Boxes 0,1,2 and 3 ***: Boxes that will be opened every 1,2,4 and 7 days respectively. All exercises start in box 0 and go up a box if you answer rightly ,but be carefull if you answer wrongly the exercise if possible will go down a box.
+*** Box 4 ***: Final box, the exercise remains in !List, but it never apears in !Exercise.
+*** chalenges ***: Randomized exercise from a book.
 
 
-***Comandos***
-***!Can***:Cancela o que estiver acontecendo como reiniciar o bot.
-***!list***:lista todos os exercícios não terminados
-***!ListAll***:Lista todos os exercícios gravados terminados ou não.
-***!Exercise***:Inicia a repetição espaçada.
-***!GenExercise***:Busca um exercício de um livro pre programado
-***!NA_Enunciado***:Começa a adicionar um exercício numérico com o enunciado depois do espaço.
-***!TA_Enunciado***:Começa a adicionar um exercício teórico com enunciado depois do espaço.
-***!ND_Índice***:Deleta o exercício numérico com o índice fornecido.
-***!TD_Índice***:Deleta o exercício teórico com o índice fornecido.
+### Comands ###
+*** !Can ***:Cancel what is happening and restarts bot
+*** !list ***:Lists exercises in boxes 0,1,2,3 and 4. It show the indexes.
+*** !ListAll ***:Lists all exercises in boxes 0,1,2 and 3.
+*** !Exercise ***: Starts spaced repetition.
+***!NA " Exercise text "***: starts the addition procces of a numeric exercise with the question after the space.
+***!TA " Exercise text "***: starts the addition procces of a theoric exercise with the question after the space;
+***!ND "index "***:Deletes the numeric exercise with the supplied index.
+***!TD index***: Deletes the theoric exercise with the supplied index.
+
