@@ -104,28 +104,31 @@ def getTheoreticalProblems():
         return []
 
 
-def salvarExerciciosNumericos(exerciciosNumericos):
-    fileEnunciadosNumericos = open(".enunciadosNumericos.txt", "w", encoding="utf-8")
-    fileDadosNumericos = open(".dadosNumericos.txt", "w", encoding="utf-8")
-    for index in range(len(exerciciosNumericos)):
-        exercise = exerciciosNumericos[index]
-        fileEnunciadosNumericos.write(exercise["enunciado"])
-        fileDadosNumericos.write(
-            str(exercise["caixa"])
+def saveNumericProblems(numericProblems):
+    numericQuestionFile = open(
+        ".spacedRepetition/data/numericQuestions", "w", encoding="utf-8"
+    )
+    numericDataFile = open(".spacedRepetition/data/numericData", "w", encoding="utf-8")
+    # writes every information in its respective file
+    for index in range(len(numericProblems)):
+        problem = numericProblems[index]
+        numericQuestionFile.write(problem["enunciado"])
+        numericDataFile.write(
+            str(problem["caixa"])
             + " "
-            + str(exercise["gabarito"])
+            + str(problem["gabarito"])
             + " "
-            + str(exercise["certeza"])
+            + str(problem["certeza"])
             + " "
-            + str(exercise["ultimaAbertura"])
+            + str(problem["ultimaAbertura"])
             + " "
-            + str(exercise["erros"])
+            + str(problem["erros"])
         )
-        if index + 1 < len(exerciciosNumericos):
-            fileEnunciadosNumericos.write("\n")
-            fileDadosNumericos.write("\n")
-    fileEnunciadosNumericos.close()
-    fileDadosNumericos.close()
+        if index + 1 < len(numericProblems):
+            numericQuestionFile.write("\n")
+            numericQuestionFile.write("\n")
+    numericQuestionFile.close()
+    numericDataFile.close()
 
 
 def salvarExerciciosTeoricos(exerciciosAAdicionar):
