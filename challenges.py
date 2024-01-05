@@ -1,29 +1,26 @@
 # coding: utf-8
 import numpy as np
 def iniciarFiles():
-    nameFile = open("","a",encoding="utf-8")
+    nameFile = open(".spacedRepetition/data/challenges/names.txt","a",encoding="utf-8")
     nameFile.close()
-    fileSubdivisoes = open(".DesafiosSubdivisoes.txt","a",encoding="utf-8")
-    fileSubdivisoes.close()
-    fileExercicios = open(".DesafiosExercicios.txt","a",encoding="utf-8")
-    fileExercicios.close()
-def verificarSeValido(materiais):
-    for material in materiais:
-    #Verifica se há os mesmo número de seções e números de exercícios por seção
-        if len(material["subdivisoes"])!=len(material["exercicios"]):
+    subdivisionsFile= open(".spacedRepetition/data/challenges/subdivisions.txt","a",encoding="utf-8")
+    subdivisionsFile.close()
+    exercisefiles = open(".spacedRepetition/data/challenges/problems.txt","a",encoding="utf-8")
+    exercisefiles.close()
+def checkChallenges(materials):
+    for material in materials:
+    #verifies if there are as many sections as exercises per section
+        if len(material["subdivisions"])!=len(material["exercises"]):
             return False
     return True
-def checagemInteiraDeStrings(stringChecada:str):
+def integerStringCheck(checkedString:str):
     try:
-        int(stringChecada)
+        int(checkedString)
     except:
         return False
     return True
-    
-            
-
-def salvarDesafios(materiais):
-    if not verificarSeValido(materiais):
+def saveChallenges(materials):
+    if not verifyIfValid(mateials):
         return False
     #Escreva os nomes
     fileNomesDosDesafios = open(".NomesDosDesafios.txt","w",encoding="utf-8")
