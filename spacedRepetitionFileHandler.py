@@ -131,7 +131,7 @@ def saveNumericProblems(problems):
     numericDataFile.close()
 
 
-def saveTheoreticalExercise(problems):
+def saveTheoreticalProblem(problems):
     theoreticalQuestionFile = open(
         ".spacedRepetition/data/teoricQuestions", "w", encoding="utf-8"
     )
@@ -160,7 +160,7 @@ def saveTheoreticalExercise(problems):
     theoreticalDataFile.close()
 
 
-def addNumericExercise(question, answer, significantFigure,problems):
+def addNumericProblem(question, answer, significantFigure,problems):
     problems.append(
         {
             "question": question,
@@ -174,10 +174,10 @@ def addNumericExercise(question, answer, significantFigure,problems):
     saveNumericProblems(problems)
 
 
-def deletarExercicioNumericos(index, exerciciosAtuais):
+def deleteNumericProblem(index, problems):
     exerciciosAtuais.pop(index)
-    salvarExerciciosNumericos(exerciciosAtuais)
-    return exerciciosAtuais
+    saveNumericProblems(problemsr)
+    return problems
 
 
 def adicionarExercicioTeorico(enunciado, gabarito, exerciciosAtuais):
