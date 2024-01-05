@@ -1,6 +1,6 @@
-### spaced Repetition bot discord
+#spaced Repetition bot discord
 
-###Geting started: 
+#Geting started: 
 
 clone the repository
 
