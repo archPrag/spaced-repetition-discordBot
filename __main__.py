@@ -12,148 +12,64 @@ import spacedRepetitionFileHandler
 import spacedRepetitionUtilities
 
 # variáveis globais
-modo = "normal"
-exercicioAtual = {}
+mode = "normal"
+placeHolder = {}
 # consiga o enunciado e exercício atual da repetição espaçada
 
 
-def getQuestions():
-    # importe os exercícios e variáveis globais
-    global modo
-    global exercicioAtual
+def findQuestionsInGreaterBoxes(lesserBox):
+    #import global variables
+    global mode
+    global placeHolder
+    numeberOfWaitingDays=[1,2,4,7]
+    colorCode=["\001b[0m","\u001b[0;32m","\u001b[2;33m","\u001b[0;34m"]
+    boldColorCode=["\001b[1m","\u001b[1;32m","\u001b[1;33m","\u001b[0;34m"]
+    writtenNumbers=["zero","one","two","three"]
     numericProblems = spacedRepetitionFileHandler.getNumericProblems()
     theoreticalProblems = spacedRepetitionFileHandler.getTheoreticalProblems()
-    print("Get exercises:" + str(numericProblems) + str(theoreticalProblems))
-    # Find a problem from numeric box 0
+    print("Get question:" + str(numericProblems) + str(theoreticalProblems))
+    #if lesser box is greater than four return(this is a recursion code)
+    if lesserBox>=4:
+        print("Get questions: Box 4 reached")
+        return "End of spaced repetition"
+    # Try to find a problem from lesserBox
+    print("Get exercises:box"+str(lesserBox))
     for index in range(len(numericProblems)):
-        print("Get question: problem " + str(index))
+        print("Get questions: exercise" + str(index))
         if numericProblems[index][
-            "caixa"
-        ] == 0 and 1 <= spacedRepetitionUtilities.dayDifference(
-            numericProblems[index]["lastOpened"], time.time()
+            "box"
+        ] == lesserBox and numeberOfWaitingDays[lesserBox] <= spacedRepetitionUtilities.dayDifference(
+            numericExercises[index]["lastOpened"], time.time()
         ):
-            print("Get question" + str(numericProblems[index]))
-            exercicioAtual = numericProblems[index]
-            modo = "numeric"
-            return "Numeric box 0:\n" + numericProblems[index]["question"]
-            # didn't find, try again in the next box ...
-    for index in range(len(theoreticalProblems)):
-        print("Obter enunciado: exercício" + str(index))
-        if theoreticalProblems[index][
-            "caixa"
-        ] == 0 and 1 <= spacedRepetitionUtilities.dayDifference(
+            print("Get questions: chosen exercise " + str(numericProblems[index]))
+            placeHolder = numericProblems[index]
+            mode = "numeric"
+            return (
+                "```ansi\n "+colorCode[lesserBox]+"Numeric box "+writtenNumber[lesserBox]+"\n"
+                + numericProblems[index]["question"]
+                + "\u001b[0m\n```"
+            )
+    #Now try finding from theoretical lesser box
+    for index in range(len(theoreticalproblems)):
+        print("get questions: exercise" + str(index))
+        if theoreticalProblem[index][
+            "box"
+        ] == lesserBox and numberOfWaitingDays <= spacedRepetitionUtilities.dayDifference(
             theoreticalProblems[index]["lastOpened"], time.time()
         ):
-            print("Obter enunciados:" + str(exerciciosTeoricos[index]))
-            exercicioAtual = exerciciosTeoricos[index]
-            modo = "esperaTeorica"
+            placeHolder = theoreticalProblems[index]
+            print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
+            modo = "theoreticalWaiting"
             return (
-                "Caixa zero teórica:\n"
-                + exerciciosTeoricos[index]["enunciado"]
-                + "\n(Envie qualquer mensagem para continuar)"
-            )
-    print("caixa 1")
-    # Não achou? ache um da caixa 1 numérica
-    for index in range(len(exerciciosNumericos)):
-        print("Obter enunciado: exercício" + str(index))
-        if exerciciosNumericos[index][
-            "caixa"
-        ] == 1 and 2 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosNumericos[index]["ultimaAbertura"], time.time()
-        ):
-            print("Obter enunciados:" + str(exerciciosNumericos[index]))
-            exercicioAtual = exerciciosNumericos[index]
-            modo = "numerico"
-            return (
-                "```ansi\n \u001b[0;32m Caixa um numérica:\n"
-                + exerciciosNumericos[index]["enunciado"]
+                "```ansi\n "+boldColorCode[lesserBox]+"Theoretical box"+writtenNumber[lesserBox]+"\n"
+                + theoreticalProblems[index]["question"]
+                + "\n(Send any question to continue)"
                 + "\u001b[0m\n```"
             )
-    # Não achou? ache um da caixa 1 Teórica
-    for index in range(len(exerciciosTeoricos)):
-        print("Obter enunciado: exercício" + str(index))
-        if exerciciosTeoricos[index][
-            "caixa"
-        ] == 1 and 2 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosTeoricos[index]["ultimaAbertura"], time.time()
-        ):
-            exercicioAtual = exerciciosTeoricos[index]
-            print("Obter enunciados:" + str(exerciciosTeoricos[index]))
-            modo = "esperaTeorica"
-            return (
-                "```ansi\n \u001b[1;32m Caixa um teórica:\n"
-                + exerciciosTeoricos[index]["enunciado"]
-                + "\n(Envie qualquer mensagem para continuar)"
-                + "\u001b[0m\n```"
-            )
-    # Não achou? Ache um da caixa 2 Numérica
-    for index in range(len(exerciciosNumericos)):
-        print("Obter enunciado: exercício" + str(index))
-        if exerciciosNumericos[index][
-            "caixa"
-        ] == 2 and 4 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosNumericos[index]["ultimaAbertura"], time.time()
-        ):
-            exercicioAtual = exerciciosNumericos[index]
-            print("Obter enunciados:" + str(exerciciosNumericos[index]))
-            modo = "numerico"
-            return (
-                "```ansi\n \u001b[2;33m Caixa dois numérica:\n"
-                + exerciciosNumericos[index]["enunciado"]
-                + "\u001b[0m\n```"
-            )
-    # Não achou? Ache um da caixa 2 Teórica
-    for index in range(len(exerciciosTeoricos)):
-        print("Obter enunciado: exercício" + str(index))
-        if exerciciosTeoricos[index][
-            "caixa"
-        ] == 2 and 4 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosTeoricos[index]["ultimaAbertura"], time.time()
-        ):
-            exercicioAtual = exerciciosTeoricos[index]
-            print("Obter enunciados:" + str(exerciciosTeoricos[index]))
-            modo = "esperaTeorica"
-            return (
-                "```ansi\n \u001b[1;33m Caixa dois teórica:\n"
-                + exerciciosTeoricos[index]["enunciado"]
-                + "\n(Envie qualquer mensagem para continuar)"
-                + "\u001b[0m\n```"
-            )
-    # Não achou? Ache um da caixa 3 Numérica
-    for index in range(len(exerciciosNumericos)):
-        print("Obter enunciado: exercício" + str(index))
-        if exerciciosNumericos[index][
-            "caixa"
-        ] == 3 and 7 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosNumericos[index]["ultimaAbertura"], time.time()
-        ):
-            exercicioAtual = exerciciosNumericos[index]
-            print("Obter enunciados:" + str(exerciciosNumericos[index]))
-            modo = "numerico"
-            return (
-                "```ansi\n \u001b[0;34m Caixa três numérica(caixa final):\n"
-                + exerciciosNumericos[index]["enunciado"]
-                + "\u001b[0m\n```"
-            )
-    # Não achou? Ache um da caixa 3 Teórica
-    for index in range(len(exerciciosTeoricos)):
-        print("Obter enunciado: exercício" + str(index))
-        if exerciciosTeoricos[index][
-            "caixa"
-        ] == 3 and 7 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosTeoricos[index]["ultimaAbertura"], time.time()
-        ):
-            print("Obter enunciados:" + str(exerciciosTeoricos[index]))
-            exercicioAtual = exerciciosTeoricos[index]
-            modo = "esperaTeorica"
-            return (
-                "```ansi\n \u001b[1;34m Caixa três teórica(caixa final):\n"
-                + exerciciosTeoricos[index]["enunciado"]
-                + "\n(Envie qualquer mensagem para continuar)"
-                + "\u001b[0m\n```"
-            )
-    # Não achou? Então não há exercícios
-    return "Repetição espaçada finalizada"
+    #Now try in the next box:
+    return findQuestionInGreaterBoxes(lesserBox+1)
+
+
 
 
 def procedimentoDeEsperaTeorica():
