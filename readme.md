@@ -1,7 +1,9 @@
 Geting started: clone the repository
 
-add your api token to a .env file with the sintax:
+Add your api token to a .env file with the sintax:
 
-run \_\_main.py\_\_ with python3
+Run \_\_main.py\_\_ with python3
 
-while the code is running the bot is active
+While the code is running the bot is active 
+
+Upload it to a server it will be always active
