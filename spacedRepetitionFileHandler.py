@@ -16,31 +16,34 @@ def initialiseFiles():
     teoricDataFile.close()
     helpFile = open("help.txt","a",encoding="utf-8")
     helpFile.close
-def obterExerciciosNumericos():
-    fileEnunciadosNumericos = open(".enunciadosNumericos.txt","r",encoding="utf-8")
-    enunciados = fileEnunciadosNumericos.read()
-    enunciados=enunciados.split("\n")
-    fileEnunciadosNumericos.close()
-    fileDadosNumericos =open(".dadosNumericos.txt","r",encoding="utf-8")
-    dados=fileDadosNumericos.read()
-    dados=dados.split("\n")
-    for index in range(len(dados)):
-        dados[index]=dados[index].split(" ")
-    fileDadosNumericos.close()
-    exerciciosNumericos=[]
-    try:
-        for index in range(len(enunciados)):
-            exerciciosNumericos.append({
-        "enunciado":enunciados[index],
-        "caixa":int(dados[index][0]),
-        "gabarito":float(dados[index][1]),
-        "certeza":int(dados[index][2]),
-        "ultimaAbertura":float(dados[index][3]),
-        "erros":int(dados[index][4])
+def getNumericExercise():
+    #Get the questions
+    numericQuestionFile = open(".spacedRepetition/data/numericQuestions","a",encoding="utf-8")
+    questions = numericQuestionFile.read()
+    questions=questions.split("\n")
+    numericQuestionFile.close()
+    #Get the Data
+    numericDataFile = open(".spacedRepetition/data/numericData","a",encoding="utf-8")
+    data=numericDataFile.read()
+    data=data.split("\n")
+    for index in range(len(data)):
+        data[index]=data[index].split(" ")
+    numericDataFile.close()
+    #Merge everything
+    numericProblems=[]
+    try:#for dealing with the empty array problem
+        for index in range(len(questions)):
+            numericProblems.append({
+        "questions":questions[index],
+        "box":int(data[index][0]),
+        "answer":float(data[index][1]),
+        "significantFigures":int(data[index][2]),
+        "lastOpened":float(data[index][3]),
+        "errors":int(data[index][4])
         })
-        return exerciciosNumericos
+        return numericProblems
     except:
-        print("Arquivos:Erro ao obter exercícios numéricos.")
+        print("Files: Empty numeric files")
         return[]
 def obterExerciciosTeoricos():
     fileEnunciadosTeoricos = open(".enunciadosTeoricos.txt","r",encoding="utf-8")
