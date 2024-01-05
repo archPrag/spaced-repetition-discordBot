@@ -1,5 +1,4 @@
 # coding: utf-8
-import initialiseDirectories
 import random
 import time
 
@@ -7,6 +6,7 @@ import discord
 import numpy as np
 
 import DesafiosFileHandler
+import initialiseDirectories
 import settings
 import spacedRepetitionFileHandler
 import spacedRepetitionUtilities
@@ -17,32 +17,32 @@ exercicioAtual = {}
 # consiga o enunciado e exercício atual da repetição espaçada
 
 
-def conseguirEnunciado():
+def getQuestions():
     # importe os exercícios e variáveis globais
     global modo
     global exercicioAtual
-    exerciciosNumericos = spacedRepetitionFileHandler.obterExerciciosNumericos()
-    exerciciosTeoricos = spacedRepetitionFileHandler.obterExerciciosTeoricos()
-    print("Obter enunciados:" + str(exerciciosNumericos) + str(exerciciosTeoricos))
-    # Ache um exercício da caixa 0 numérica
-    for index in range(len(exerciciosNumericos)):
-        print("Obter enunciado: exercício" + str(index))
-        if exerciciosNumericos[index][
+    numericProblems = spacedRepetitionFileHandler.getNumericProblems()
+    theoreticalProblems = spacedRepetitionFileHandler.getTheoreticalProblems()
+    print("Get exercises:" + str(numericProblems) + str(theoreticalProblems))
+    # Find a problem from numeric box 0
+    for index in range(len(numericProblems)):
+        print("Get question: problem " + str(index))
+        if numericProblems[index][
             "caixa"
-        ] == 0 and 1 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosNumericos[index]["ultimaAbertura"], time.time()
+        ] == 0 and 1 <= spacedRepetitionUtilities.dayDifference(
+            numericProblems[index]["lastOpened"], time.time()
         ):
-            print("Obter enunciados:" + str(exerciciosNumericos[index]))
-            exercicioAtual = exerciciosNumericos[index]
-            modo = "numerico"
-            return "Caixa zero numérica:\n" + exerciciosNumericos[index]["enunciado"]
-    # Não achou? ache um da caixa 0 teórica
-    for index in range(len(exerciciosTeoricos)):
+            print("Get question" + str(numericProblems[index]))
+            exercicioAtual = numericProblems[index]
+            modo = "numeric"
+            return "Numeric box 0:\n" + numericProblems[index]["question"]
+            # didn't find, try again in the next box ...
+    for index in range(len(theoreticalProblems)):
         print("Obter enunciado: exercício" + str(index))
-        if exerciciosTeoricos[index][
+        if theoreticalProblems[index][
             "caixa"
-        ] == 0 and 1 <= spacedRepetitionUtilities.diferencaEmDias(
-            exerciciosTeoricos[index]["ultimaAbertura"], time.time()
+        ] == 0 and 1 <= spacedRepetitionUtilities.dayDifference(
+            theoreticalProblems[index]["lastOpened"], time.time()
         ):
             print("Obter enunciados:" + str(exerciciosTeoricos[index]))
             exercicioAtual = exerciciosTeoricos[index]
