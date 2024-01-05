@@ -1,8 +1,8 @@
 # coding: utf-8
 import numpy as np
 def iniciarFiles():
-    fileNomesDosDesafios = open(".NomesDosDesafios.txt","a",encoding="utf-8")
-    fileNomesDosDesafios.close()
+    nameFile = open("","a",encoding="utf-8")
+    nameFile.close()
     fileSubdivisoes = open(".DesafiosSubdivisoes.txt","a",encoding="utf-8")
     fileSubdivisoes.close()
     fileExercicios = open(".DesafiosExercicios.txt","a",encoding="utf-8")
