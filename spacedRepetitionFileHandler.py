@@ -262,16 +262,16 @@ def listUnfinishedProblems():
                 + str(problem["errors"])
             )
             counter += 1
-    listProblems.append("All problems have been listed.-" + str(contador) + " unfinished problems.")
+    listProblems.append("All problems have been listed.-" + str(counter) + " unfinished problems.")
     return listProblems
 
 
-def conseguirAjuda():
+def getHelp():
     # Leia o que está escrito em ajuda.txt
-    fileAjuda = open("help.txt", "r", encoding="utf-8")
-    textoDeAjuda = fileAjuda.read()
-    fileAjuda.close()
-    return textoDeAjuda
+    helpFile = open("help.txt", "r", encoding="utf-8")
+    helpText = helpFile.read()
+    helpFile.close()
+    return helpText
 
 
 initialiseFiles()
