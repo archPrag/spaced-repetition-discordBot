@@ -160,18 +160,18 @@ def saveTheoreticalExercise(problems):
     theoreticalDataFile.close()
 
 
-def adicionarExercicioNumerico(enunciado, gabarito, certeza, exerciciosAtuais):
-    exerciciosAtuais.append(
+def addNumericExercise(question, answer, significantFigure,problems):
+    problems.append(
         {
-            "enunciado": enunciado,
-            "caixa": 0,
-            "gabarito": float(gabarito),
-            "certeza": int(certeza),
+            "question": question,
+            "box": 0,
+            "answer": float(answer),
+            "significantFigures": int(significantFigure),
             "ultimaAbertura": int(time.time()),
             "erros": 0,
         }
     )
-    salvarExerciciosNumericos(exerciciosAtuais)
+    saveNumericProblems(problems)
 
 
 def deletarExercicioNumericos(index, exerciciosAtuais):
