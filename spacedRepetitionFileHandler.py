@@ -3,19 +3,19 @@ import time
 import os
 
 def initialiseFiles():
-    #makes (or not) the data files
-    fileEnunciadosNumericos = open(".spacedRepetition/data/NumericExercise","a",encoding="utf-8")
-    fileDadosNumericos = open(".dadosNumericos.txt","a",encoding="utf-8")
-    fileEnunciadosNumericos.close()
-    fileDadosNumericos.close()
-    fileEnunciadosTeoricos = open(".enunciadosTeoricos.txt","a",encoding="utf-8")
-    fileDadosTeoricos= open(".dadosTeoricos.txt","a",encoding="utf-8")
-    fileGabaritosTeoricos = open(".gabaritosTeoricos.txt","a",encoding="utf-8")
-    fileEnunciadosTeoricos.close()
-    fileDadosTeoricos.close()
-    fileGabaritosTeoricos.close()
-    fileAjuda = open("help.txt","a",encoding="utf-8")
-    fileAjuda.close
+    #Ensures the existence of data files
+    numericQuestionFile = open(".spacedRepetition/data/numericQuestions","a",encoding="utf-8")
+    numericDataFile = open(".spacedRepetition/data/numericData","a",encoding="utf-8")
+    numericQuestionFile.close()
+    numericDataFile.close()
+    teoricQuestionFile = open(".spacedRepetition/data/teoricQuestions","a",encoding="utf-8")
+    teoricDataFile = open(".spacedRepetition/data/teoricData","a",encoding="utf-8")
+    teoricAnswerFile = open(".spacedRepetition/data/teoricAnswers","a",encoding="utf-8")
+    teoricQuestionFile.close()
+    teoricAnswerFile.close()
+    teoricDataFile.close()
+    helpFile = open("help.txt","a",encoding="utf-8")
+    helpFile.close
 def obterExerciciosNumericos():
     fileEnunciadosNumericos = open(".enunciadosNumericos.txt","r",encoding="utf-8")
     enunciados = fileEnunciadosNumericos.read()
