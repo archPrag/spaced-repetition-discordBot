@@ -175,22 +175,22 @@ def addNumericProblem(question, answer, significantFigure,problems):
 
 
 def deleteNumericProblem(index, problems):
-    exerciciosAtuais.pop(index)
-    saveNumericProblems(problemsr)
+    problems.pop(index)
+    saveNumericProblems(problems)
     return problems
 
 
-def adicionarExercicioTeorico(enunciado, gabarito, exerciciosAtuais):
-    exerciciosAtuais.append(
+def addTheoricProblem(question, answer, problems):
+    problems.append(
         {
-            "enunciado": enunciado,
-            "caixa": 0,
-            "gabarito": gabarito,
-            "ultimaAbertura": int(time.time()),
-            "erros": 0,
+            "question": question,
+            "box": 0,
+            "answer": answer,
+            "lastOpened": int(time.time()),
+            "errors": 0,
         }
     )
-    salvarExerciciosTeoricos(exerciciosAtuais)
+    saveTheoreticalProblem(problems)
 
 
 def deletarExercicioTeorico(index, exerciciosAtuais):
