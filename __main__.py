@@ -154,27 +154,25 @@ def numeric(answer: str):
     placeHolder = {"mode":"normal"}
     return "Unfortunately you missed by " + uncertainty + " the answer was "+str(number)+". Better luck next time!"
 
-def adicaoNumerica(resposta: str):
-    print("Adição numérica:" + resposta)
-    # verifique se a resposta é de fato um número
-    if not spacedRepetitionUtilities.checagemFlutuanteDeStrings(resposta):
-        print("Adição numérica:resposta não numérica")
-        return "Adicione um gabarito numérico válido."
-    # Importe as dependências nescessárias
-    global modo
-    global exercicioAtual
-    exerciciosNumericos = spacedRepetitionFileHandler.obterExerciciosNumericos()
-    # salve o exercício
-    enunciado = exercicioAtual["enunciado"]
-    gabarito = float(resposta)
-    certeza = spacedRepetitionUtilities.algarismosSignificativosEmString(resposta)
-    spacedRepetitionFileHandler.adicionarExercicioNumerico(
-        enunciado, gabarito, certeza, exerciciosNumericos
+def numericAdditionFinal(answer: str):
+    print("Numeric addition:" + answer)
+    #Check if the answer is a number
+    if not spacedRepetitionUtilities.floatStringCheck(answer):
+        print("Numeric Addition:Non numeric answer")
+        return "Add a valid numeric answer."
+    #Get dependencies
+    global placeHolder
+    problems = spacedRepetitionFileHandler.getNumericExercise()
+    #Save exercise
+    question = placeHolder["question"]
+    answerFinal = float(answer)
+    significantDigits = spacedRepetitionUtilities.stringSignificantFigures(answer)
+    spacedRepetitionFileHandler.addNumericProblem(
+        question, answerFinal, significantFigures, numericExercises
     )
-    exercicioAtual = {}
-    modo = "normal"
-    print("Adição numérica: exercício adicionado.")
-    return "Exercício(" + enunciado + ") adicionado."
+    placeHolder = {"mode":"normal"}
+    print("Numeric addition:problem added")
+    return "Problem (" + enunciado + ") Added"
 
 
 def adicaoTeorica(resposta: str):
