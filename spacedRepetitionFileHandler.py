@@ -199,35 +199,35 @@ def deleteTheoreticalExercise(index, exerciciosAtuais):
     return exerciciosAtuais
 
 
-def listarExercicios():
-    exerciciosNumericos = obterExerciciosNumericos()
-    exerciciosTeoricos = obterExerciciosTeoricos()
-    exerciciosListados = ["Exercícios Numéricos:"]
-    for index in range(len(exerciciosNumericos)):
-        exercise = exerciciosNumericos[index]
-        exerciciosListados.append(
+def listProblems():
+    numericProblems = getNumericProblems()
+    theoreticalProblems = getTheoreticalProblems()
+    listProblems = ["Numerical Problems:"]
+    for index in range(len(numericProblems)):
+        problem = numericProblems[index]
+        listProblems.append(
             str(index)
             + "-"
-            + exercise["enunciado"]
-            + "-caixa:"
-            + str(exercise["caixa"])
-            + "-erros:"
-            + str(exercise["erros"])
+            + problem["question"]
+            + "-box:"
+            + str(problem["box"])
+            + "-errors:"
+            + str(problem["errors"])
         )
-    exerciciosListados.append("Exercícios teóricos:")
-    for index in range(len(exerciciosTeoricos)):
-        exercise = exerciciosTeoricos[index]
-        exerciciosListados.append(
+    listProblems.append("Theoretical Problems:")
+    for index in range(len(theoreticalProblems)):
+        exercise = theoreticalProblems[index]
+        listProblems.append(
             str(index)
             + "-"
-            + exercise["enunciado"]
-            + "-caixa:"
-            + str(exercise["caixa"])
-            + "-erros:"
-            + str(exercise["erros"])
+            + exercise["question"]
+            + "-box:"
+            + str(exercise["box"])
+            + "-errors:"
+            + str(exercise["errors"])
         )
-    exerciciosListados.append("finalizado")
-    return exerciciosListados
+    listProblems.append("all problems have been listed.")
+    return listProblems
 
 
 def listarExerciciosIncompletos():
