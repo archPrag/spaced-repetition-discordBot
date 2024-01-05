@@ -17,7 +17,7 @@ def dayDifference(initialTime,finalTime):
     initialTime=int((initialTime-10800)/86400)
     finalTime=int((finalTime-10800)/86400)
     return abs(finalTime-initialTime)
-def compareValue(correct,dubious,significantFigures):
+def compareValues(correct,dubious,significantFigures):
     if correct==0:
         return abs(dubious)<=10*0.1**significantFigures
     elif abs(correct)>=10:

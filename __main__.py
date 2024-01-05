@@ -81,11 +81,10 @@ def theoreticalWaiting():
     # Finalize o modo de espera teórico
     print("Theoretical waiting: the waiting is over.")
     placeHolder["mode"] = "theoretical"
-    return "The answer was \n:" + placeHolder["answer"] + "\n Did you get it right(y,n)"
+    return "The answer was: \n" + placeHolder["problem"]["answer"] + "\n Did you get it right?(y,n)"
 
-def safelyDecreaseBox(initialBox){
+def safelyDecreaseBox(initialBox):
     return initialBox-1+int(initialBox==0)
-}
 
 def theoretical(answer: str):
     #get dependencies
@@ -107,75 +106,53 @@ def theoretical(answer: str):
         return "Congratulations, you got it right!!!"
     elif resposta.startswith("n"):
         problems[index]["box"]=SafelyDecreaseBox(problems[index]["box"])
+        problems[index]["errors"]+=1;
         print(
             "theoretical:"
                 + str(problems)
             )
         spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
         placeHolder = {"mode":"normal"}
-        return "Unfortunately you got it wrong, better luck next time"
-    else:
-        #make the user put a valid input
-        return "Input a valid answer 's' or 'n'"
+        return "Unfortunately you got it wrong. Better luck next time!"
+    #make the user put a valid input
+    return "Input a valid answer 'y' or 'n'"
 
 
-def procedimentoNumerico(resposta: str):
-    print("Finalização Numérica" + resposta)
-    # Verifique se a resposta é um número para início de conversa
-    if not spacedRepetitionUtilities.checagemFlutuanteDeStrings(resposta):
-        print("resposta não numérica")
-        return "Adicione uma resposta numérica"
-    numero = float(resposta)
-    # Adquira as dependências
-    global modo
-    global exercicioAtual
-    exerciciosNumericos = spacedRepetitionFileHandler.obterExerciciosNumericos()
-    # Tome o exercício
-    if spacedRepetitionUtilities.compararValores(
-        exercicioAtual["gabarito"], numero, exercicioAtual["certeza"]
+def numeric(answer: str):
+    print("Numeric:answer" + answer)
+    #verifies if the user inputed a valid answer
+    if not spacedRepetitionUtilities.integerStringCheck(answer):
+        print("Numeric: invalid non numeric input")
+        return "Add a numeric answer"
+    number = float(answer)
+    #get dependencies
+    global placeHolder
+    problems = spacedRepetitionFileHandler.getNumericExercise()
+    #Apply exercise
+    print(
+        "Numeric:"
+        + str(problems)
+    )
+    index=placeHolder["index"]
+    problems[index]["lastOpened"]=int(time.time())
+    if spacedRepetitionUtilities.compareValueS(
+        placeHolder["problem"]["answer"], number, placeHolder["problem"]["significantFigures"]
     ):
-        # salve no caso de acerto
-        for index in range(len(exerciciosNumericos)):
-            if exercicioAtual == exerciciosNumericos[index]:
-                exerciciosNumericos[index]["caixa"] += 1
-                exerciciosNumericos[index]["ultimaAbertura"] = int(time.time())
-                print(
-                    "Finalização numérica:"
-                    + str(exercicioAtual)
-                    + str(exerciciosNumericos)
-                )
-                spacedRepetitionFileHandler.salvarExerciciosNumericos(
-                    exerciciosNumericos
-                )
-                break
-        modo = "normal"
-        exercicioAtual = {}
-        return "Parabéns, você acertou"
-    else:
-        # salve no caso de erro
-        for index in range(len(exerciciosNumericos)):
-            if exercicioAtual == exerciciosNumericos[index]:
-                exerciciosNumericos[index]["caixa"] += (
-                    int(exerciciosNumericos[index]["caixa"] == 0) - 1
-                )
-                exerciciosNumericos[index]["erros"] += 1
-                print(
-                    "Finalização numérica:"
-                    + str(exercicioAtual)
-                    + str(exerciciosNumericos)
-                )
-                exerciciosNumericos[index]["ultimaAbertura"] = int(time.time())
-                spacedRepetitionFileHandler.salvarExerciciosNumericos(
-                    exerciciosNumericos
-                )
-                break
-        modo = "normal"
-        erro = spacedRepetitionUtilities.erroPercentual(
-            exercicioAtual["gabarito"], numero
+        problems[index]["box"]+=1
+        print(
+            "Numeric:"
+            + str(problems)
         )
-        exercicioAtual = {}
-        return "infelizmente você errou por" + erro + ", tente novamente outro dia."
-
+        spacedRepetitionFileHandler.saveNumericProblems(problems)
+        placeHolder={"mode":"normal"}
+        return "Congratulations, you got it right!!!"
+    problems[index]["box"]=safelyDecreaseBox(problems[index]["box"])
+    problems[index]["errors"] += 1
+    uncertainty = spacedRepetitionUtilities.percentualDeviation(
+    problems[index]["answer"], number
+    )
+    placeHolder = {"mode":"normal"}
+    return "Unfortunately you missed by " + uncertainty + " the answer was "+str(number)+". Better luck next time!"
 
 def adicaoNumerica(resposta: str):
     print("Adição numérica:" + resposta)
