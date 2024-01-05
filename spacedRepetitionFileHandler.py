@@ -202,7 +202,7 @@ def deleteTheoreticalExercise(index, exerciciosAtuais):
 def listProblems():
     numericProblems = getNumericProblems()
     theoreticalProblems = getTheoreticalProblems()
-    listProblems = ["Numerical Problems:"]
+    listProblems = ["Numeric problems:"]
     for index in range(len(numericProblems)):
         problem = numericProblems[index]
         listProblems.append(
@@ -214,7 +214,7 @@ def listProblems():
             + "-errors:"
             + str(problem["errors"])
         )
-    listProblems.append("Theoretical Problems:")
+    listProblems.append("Theoretical problems:")
     for index in range(len(theoreticalProblems)):
         exercise = theoreticalProblems[index]
         listProblems.append(
@@ -226,44 +226,44 @@ def listProblems():
             + "-errors:"
             + str(exercise["errors"])
         )
-    listProblems.append("all problems have been listed.")
+    listProblems.append("All problems have been listed.")
     return listProblems
 
 
-def listarExerciciosIncompletos():
-    exerciciosNumericos = obterExerciciosNumericos()
-    exerciciosTeoricos = obterExerciciosTeoricos()
-    exerciciosListados = ["Exercícios Numéricos:"]
-    contador = 0
-    for index in range(len(exerciciosNumericos)):
-        exercise = exerciciosNumericos[index]
-        if exercise["caixa"] < 4:
-            exerciciosListados.append(
+def listUnfinishedProblems():
+    numericProblems = getNumericProblems()
+    theoreticalProblems = getTheoreticalProblems()
+    listProblems = ["Numeric problems:"]
+    counter = 0
+    for index in range(len(numericProblems)):
+        problem = numericProblems[index]
+        if problem["box"] < 4:
+            listProblems.append(
                 str(index)
                 + "-"
-                + exercise["enunciado"]
-                + "-caixa:"
-                + str(exercise["caixa"])
-                + "-erros:"
-                + str(exercise["erros"])
+                + problem["question"]
+                + "-box:"
+                + str(problem["box"])
+                + "-errors:"
+                + str(problem["errors"])
             )
-            contador += 1
-    exerciciosListados.append("Exercícios teóricos:")
-    for index in range(len(exerciciosTeoricos)):
-        exercise = exerciciosTeoricos[index]
-        if exercise["caixa"] < 4:
-            exerciciosListados.append(
+            counter += 1
+    listProblems.append("Theoretical problems:")
+    for index in range(len(theoreticalProblems)):
+        problem = theoreticalProblems[index]
+        if problem["box"] < 4:
+            listProblems.append(
                 str(index)
                 + "-"
-                + exercise["enunciado"]
+                + problem["question"]
                 + "-caixa:"
-                + str(exercise["caixa"])
+                + str(problem["box"])
                 + "-erros:"
-                + str(exercise["erros"])
+                + str(problem["errors"])
             )
-            contador += 1
-    exerciciosListados.append("finalizado:" + str(contador) + "exercícios incompletos")
-    return exerciciosListados
+            counter += 1
+    listProblems.append("All problems have been listed.-" + str(contador) + " unfinished problems.")
+    return listProblems
 
 
 def conseguirAjuda():
