@@ -175,8 +175,8 @@ def numericAddition(answer: str):
     return "Problem (" + enunciado + ") Added"
 
 
-def theoricAddition(answer: str):
-    print("Theoric addition:" + answer)
+def theoreticalDeletion(answer: str):
+    print("Theoretical addition:" + answer)
     #import the dependencies
     global placeHolder
     problems=spacedRepetitionFileHandler.getTheoreticalProblems()
@@ -186,7 +186,7 @@ def theoricAddition(answer: str):
         question, answer, theoricExercise
     )
     placeHolder={"mode":"normal"}
-    print("TheoricAddition : problem added")
+    print("Theoretical Addition : problem added")
     return "Problem (" + enunciado + ") added."
 
 
@@ -194,26 +194,25 @@ def numericDeletion(answer: str):
     print("Numeric Deletion:" + answer)
     if not spacedRepetitionUtilities.integerStringCheck(answer):
         print("Numeric deletion: the answer is not integer")
-        return "Not avalid index."
-    numericExercise = spacedRepetitionFileHandler.getNumericExercise()
+        return "Not a valid index."
+    problems = spacedRepetitionFileHandler.getNumericExercise()
     spacedRepetitionFileHandler.deleteNumericProblem(
-        int(answer), exerciciosNumericos
+        int(answer), problems
     )
     return "Exercise deleted."
 
 
-def procedimentoDeDelecaoTeorica(resposta: str):
-    print("Deleção teórica:" + resposta)
-    # verifique se é um inteiro
-    if not spacedRepetitionUtilities.checagemInteiraDeStrings(resposta):
-        print("Deleção teórica:Resposta não numérica")
-        return "Resposta não numérica"
+def theoreticalDeletion(answer: str):
+    print("Theoretical Deletion" + answer)
+    if not spacedRepetitionUtilities.integerStringCheck(string):
+        print("Theoretical Deletion: the index is not an integer")
+        return "Not a valid index."
     # Delete o exercício de índice da resposta
-    exercíciosTeóricos = spacedRepetitionFileHandler.obterExerciciosTeoricos()
+    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
     spacedRepetitionFileHandler.deletarExercicioTeorico(
-        int(resposta), exercíciosTeóricos
+        int(answer), problems
     )
-    return "Exercício Deletado"
+    return "Deleted Exercise"
 
 
 def procedimentoDeAdicaoDeMateriais(resposta: str):
