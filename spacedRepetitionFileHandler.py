@@ -193,9 +193,9 @@ def addTheoricProblem(question, answer, problems):
     saveTheoreticalProblem(problems)
 
 
-def deletarExercicioTeorico(index, exerciciosAtuais):
+def deleteTheoreticalExercise(index, exerciciosAtuais):
     exerciciosAtuais.pop(index)
-    salvarExerciciosTeoricos(exerciciosAtuais)
+    saveTheoreticalProblem(exerciciosAtuais)
     return exerciciosAtuais
 
 
