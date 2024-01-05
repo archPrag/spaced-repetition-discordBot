@@ -1,40 +1,41 @@
 # coding: utf-8
 
-def checagemInteiraDeStrings(stringNumerica:str):
+def integerStringCheck(numericString:str):
     try:
-        int(stringNumerica)
+        int(numericString)
         return True
     except:
         return False
-def checagemFlutuanteDeStrings(stringNumerica:str):
+def floatStringCheck(numericString:str):
     try:
-        float(stringNumerica)
+        float(numericString)
         return True
     except:
         return False
-def diferencaEmDias(tempoinicial,tempofinal):
-    tempoinicial=int((tempoinicial-10800)/86400)
-    tempofinal=int((tempofinal-10800)/86400)
-    return abs(tempofinal-tempoinicial)
-def compararValores(valorCerto,valorDuvidoso,algarismosSignoficativos):
-    if valorCerto==0:
-        return abs(valorDuvidoso)<=10*0.1**algarismosSignoficativos
-    elif abs(valorCerto)>=10:
-        return compararValores(valorCerto/10,valorDuvidoso/10,algarismosSignoficativos)
-    elif abs(valorCerto)<1:
-        return compararValores(valorCerto*10,valorDuvidoso*10,algarismosSignoficativos)
+def dayDifference(initialTime,finalTime):
+    #Using Brazil-Sao_Paulo Timezone
+    initialTime=int((initialTime-10800)/86400)
+    finalTime=int((finalTime-10800)/86400)
+    return abs(finalTime-initialTime)
+def compareValue(correct,dubious,significantFigures):
+    if correct==0:
+        return abs(dubious)<=10*0.1**significantFigures
+    elif abs(correct)>=10:
+        return compareValue(correct/10,dubious/10,significantFigures)
+    elif abs(correct)<1:
+        return compareValue(correct*10,dubious*10,significantFigures)
     else:
-        return abs(valorCerto-valorDuvidoso)<=10*0.1**algarismosSignoficativos
-def algarismosSignificativosEmString(stringNumerica:str):
-    #verifique se é de fato numérica
-    if not checagemFlutuanteDeStrings(stringNumerica):
+        return abs(correct-dubious)<=10*0.1**significantFigures
+def stringSignificantFigures(numericString:str):
+    #verify if the string is numeric
+    if not floatStringCheck(numericString):
         return 0
-    #retorne o número de algarismos significativos
-    stringNumerica.split(".")
-    if len(stringNumerica)==1:
-        return len(stringNumerica[0])
+    #return the significant figure numbers
+    numericString.split(".")
+    if len(numericString)==1:
+        return len(numericString[0])
     else:
-        return len(stringNumerica[0])+len(stringNumerica[1])
+        return len(numericString[0])+len(numericString[1])
 
-def erroPercentual(correto:float,errado:float):
-    return str(100*(correto-errado))+"%"
+def percentualDeviation(right:float,wrong:float):
+    return str(100*(right-wrong))+"%"
