@@ -1,6 +1,6 @@
 # coding: utf-8
 import numpy as np
-def iniciarFiles():
+def initializeFiles():
     nameFile = open(".spacedRepetition/data/challenges/names.txt","a",encoding="utf-8")
     nameFile.close()
     subdivisionsFile= open(".spacedRepetition/data/challenges/subdivisions.txt","a",encoding="utf-8")
@@ -130,4 +130,4 @@ def materiaisString(materiais):
 
 
 
-iniciarFiles()
+initializeFiles()
