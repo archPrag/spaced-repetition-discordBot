@@ -1,4 +1,5 @@
 # coding: utf-8
+import initialiseDirectories
 import random
 import time
 

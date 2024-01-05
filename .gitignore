@@ -1,16 +1,21 @@
-#my spaced repetition problems .txt
+#my spaced repetition problems .txt initially
 .dadosNumericos.txt
 .dadosTeoricos.txt
 .dadosTeoricos.txt
 .enunciadosNumericos.txt
 .enunciadosTeoricos.txt
 .gabaritosTeoricos.txt
-#My randomized chalanges problems .txt
+
+#My randomized chalanges problems .txt initially.
 .DesafiosExercicios.txt
 .DesafiosSubdivisoes.txt
 .NomesDosDesafios.txt
-#Api key for discord
+
+#The final file configuration and data.
+.spacedRepetition/
+#Api key for discord initially
 .env
+
 #Python file's
 __pycache__/
 bot-venv/

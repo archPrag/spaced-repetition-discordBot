@@ -1,8 +1,10 @@
 # coding: utf-8
 import time
+import os
 
-def iniciarFiles():
-    fileEnunciadosNumericos = open(".enunciadosNumericos.txt","a",encoding="utf-8")
+def initialiseFiles():
+    #makes (or not) the data files
+    fileEnunciadosNumericos = open(".spacedRepetition/data/NumericExercise","a",encoding="utf-8")
     fileDadosNumericos = open(".dadosNumericos.txt","a",encoding="utf-8")
     fileEnunciadosNumericos.close()
     fileDadosNumericos.close()
@@ -161,4 +163,4 @@ def conseguirAjuda():
     textoDeAjuda=fileAjuda.read()
     fileAjuda.close()
     return textoDeAjuda
-iniciarFiles()
+initialiseFiles()
