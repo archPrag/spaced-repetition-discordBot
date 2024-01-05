@@ -131,7 +131,7 @@ def saveNumericProblems(problems):
     numericDataFile.close()
 
 
-def saveTheoreticalProblem(problems):
+def saveTheoreticalProblems(problems):
     theoreticalQuestionFile = open(
         ".spacedRepetition/data/teoricQuestions", "w", encoding="utf-8"
     )

@@ -12,14 +12,12 @@ import spacedRepetitionFileHandler
 import spacedRepetitionUtilities
 
 # variáveis globais
-mode = "normal"
-placeHolder = {}
+placeHolder = {"mode":"normal"}
 # consiga o enunciado e exercício atual da repetição espaçada
 
 
 def findQuestionsInGreaterBoxes(lesserBox):
     #import global variables
-    global mode
     global placeHolder
     numeberOfWaitingDays=[1,2,4,7]
     colorCode=["\001b[0m","\u001b[0;32m","\u001b[2;33m","\u001b[0;34m"]
@@ -42,8 +40,10 @@ def findQuestionsInGreaterBoxes(lesserBox):
             numericExercises[index]["lastOpened"], time.time()
         ):
             print("Get questions: chosen exercise " + str(numericProblems[index]))
-            placeHolder = numericProblems[index]
-            mode = "numeric"
+            placeHolder = {"problem":numericProblems[index],
+            "index":index,
+            "mode":"numeric"
+            }
             return (
                 "```ansi\n "+colorCode[lesserBox]+"Numeric box "+writtenNumber[lesserBox]+"\n"
                 + numericProblems[index]["question"]
@@ -57,7 +57,10 @@ def findQuestionsInGreaterBoxes(lesserBox):
         ] == lesserBox and numberOfWaitingDays <= spacedRepetitionUtilities.dayDifference(
             theoreticalProblems[index]["lastOpened"], time.time()
         ):
-            placeHolder = theoreticalProblems[index]
+            placeHolder = {"problem":theoreticalProblems[index],
+                           "index":index,
+                           "mode":"theoreticalWaiting"
+                           }
             print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
             modo = "theoreticalWaiting"
             return (
@@ -72,62 +75,48 @@ def findQuestionsInGreaterBoxes(lesserBox):
 
 
 
-def procedimentoDeEsperaTeorica():
-    # Consiga as dependências
-    global modo
-    global exercicioAtual
+def theoreticalWaiting():
+    #Get dependencies
+    global placeHolder
     # Finalize o modo de espera teórico
-    print("Espera teórica: A espera parou")
-    modo = "teorico"
-    return "A resposta era:\n" + exercicioAtual["gabarito"] + "\n você acertou(s/n)"
+    print("Theoretical waiting: the waiting is over.")
+    placeHolder["mode"] = "theoretical"
+    return "The answer was \n:" + placeHolder["answer"] + "\n Did you get it right(y,n)"
 
+def safelyDecreaseBox(initialBox){
+    return initialBox-1+int(initialBox==0)
+}
 
-def procedimentoTeorico(resposta: str):
-    # Consiga as dependências
-    global modo
-    global exercicioAtual
-    exerciciosTeoricos = spacedRepetitionFileHandler.obterExerciciosTeoricos()
-    # Tome o exercício teórico
-    print("Finalização teórica:" + resposta)
-    resposta = resposta.lower()
-    if resposta.startswith("s"):
-        # Salve o exercício no caso de acerto
-        for index in range(len(exerciciosTeoricos)):
-            if exercicioAtual == exerciciosTeoricos[index]:
-                exerciciosTeoricos[index]["caixa"] += 1
-                exerciciosTeoricos[index]["ultimaAbertura"] = int(time.time())
-                print(
-                    "Finalização teórica:"
-                    + str(exercicioAtual)
-                    + str(exerciciosTeoricos)
-                )
-                spacedRepetitionFileHandler.salvarExerciciosTeoricos(exerciciosTeoricos)
-                break
-        modo = "normal"
-        exercicioAtual = {}
-        return "Parabéns, você acertou!"
+def theoretical(answer: str):
+    #get dependencies
+    global placeHolder
+    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
+    #Apply exercise
+    print("theoretical: Did User get it right?" + answer)
+    index=placeHolder["index"]
+    problems[index]["lastOpened"] = int(time.time())
+    answer = answer.lower()
+    if answer.startswith("y"):
+        problems[index]["box"] += 1
+        print(
+            "theoretical:"
+                + str(problems)
+            )
+        spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
+        placeHolder = {"mode":"normal"}
+        return "Congratulations, you got it right!!!"
     elif resposta.startswith("n"):
-        # Salve o exercício no caso de erro
-        for index in range(len(exerciciosTeoricos)):
-            if exercicioAtual == exerciciosTeoricos[index]:
-                exerciciosTeoricos[index]["caixa"] += (
-                    int(exerciciosTeoricos[index]["caixa"] == 0) - 1
-                )
-                exerciciosTeoricos[index]["erros"] += 1
-                exerciciosTeoricos[index]["ultimaAbertura"] = int(time.time())
-                print(
-                    "Finalização teórica:"
-                    + str(exercicioAtual)
-                    + str(exerciciosTeoricos)
-                )
-                spacedRepetitionFileHandler.salvarExerciciosTeoricos(exerciciosTeoricos)
-                break
-        modo = "normal"
-        exercicioAtual = {}
-        return "Infelizmente você errou, tente novamente outro dia."
+        problems[index]["box"]=SafelyDecreaseBox(problems[index]["box"])
+        print(
+            "theoretical:"
+                + str(problems)
+            )
+        spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
+        placeHolder = {"mode":"normal"}
+        return "Unfortunately you got it wrong, better luck next time"
     else:
-        # Insite o usuário a botar uma resposta válida no caso de não haver respondido corretamente
-        return "Adicione uma resposta válida s ou n"
+        #make the user put a valid input
+        return "Input a valid answer 's' or 'n'"
 
 
 def procedimentoNumerico(resposta: str):
