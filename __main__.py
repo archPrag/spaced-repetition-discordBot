@@ -154,7 +154,7 @@ def numeric(answer: str):
     placeHolder = {"mode":"normal"}
     return "Unfortunately you missed by " + uncertainty + " the answer was "+str(number)+". Better luck next time!"
 
-def numericAdditionFinal(answer: str):
+def numericAddition(answer: str):
     print("Numeric addition:" + answer)
     #Check if the answer is a number
     if not spacedRepetitionUtilities.floatStringCheck(answer):
@@ -175,26 +175,23 @@ def numericAdditionFinal(answer: str):
     return "Problem (" + enunciado + ") Added"
 
 
-def adicaoTeorica(resposta: str):
-    print("Adição teórica:" + resposta)
-    # importe as dependências nescessárias
-    global modo
-    global exercicioAtual
-    exerciciosTeoricos = spacedRepetitionFileHandler.obterExerciciosTeoricos()
-    # Salve o exercício
-    enunciado = exercicioAtual["enunciado"]
+def theoricAddition(answer: str):
+    print("Theoric addition:" + answer)
+    #import the dependencies
+    global placeHolder
+    problems=spacedRepetitionFileHandler.getTheoreticalProblems()
+    #save the exercise
+    question = placeHolder["answer"]
     spacedRepetitionFileHandler.adicionarExercicioTeorico(
-        enunciado, resposta, exerciciosTeoricos
+        question, answer, theoricExercise
     )
-    modo = "normal"
-    exercicioAtual = {}
-    print("Adição teórica: exercício adicionado")
-    return "Exercício(" + enunciado + ") adicionado."
+    placeHolder={"mode":"normal"}
+    print("TheoricAddition : problem added")
+    return "Problem (" + enunciado + ") added."
 
 
 def procedimentoDeDelecaoNumerica(resposta: str):
     print("Deleção numérica:" + resposta)
-    # verifique se é um inteiro
     if not spacedRepetitionUtilities.checagemInteiraDeStrings(resposta):
         print("Deleção numérica:Resposta não numérica")
         return "Resposta não numérica"
