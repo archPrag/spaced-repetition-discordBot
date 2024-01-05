@@ -180,7 +180,7 @@ def deleteNumericProblem(index, problems):
     return problems
 
 
-def addTheoricProblem(question, answer, problems):
+def addTheoreticalcProblem(question, answer, problems):
     problems.append(
         {
             "question": question,

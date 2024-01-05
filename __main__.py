@@ -182,7 +182,7 @@ def theoricAddition(answer: str):
     problems=spacedRepetitionFileHandler.getTheoreticalProblems()
     #save the exercise
     question = placeHolder["answer"]
-    spacedRepetitionFileHandler.adicionarExercicioTeorico(
+    spacedRepetitionFileHandler.addTheoreticalcProblem(
         question, answer, theoricExercise
     )
     placeHolder={"mode":"normal"}
@@ -190,16 +190,16 @@ def theoricAddition(answer: str):
     return "Problem (" + enunciado + ") added."
 
 
-def procedimentoDeDelecaoNumerica(resposta: str):
-    print("Deleção numérica:" + resposta)
-    if not spacedRepetitionUtilities.checagemInteiraDeStrings(resposta):
-        print("Deleção numérica:Resposta não numérica")
-        return "Resposta não numérica"
-    exerciciosNumericos = spacedRepetitionFileHandler.obterExerciciosNumericos()
-    spacedRepetitionFileHandler.deletarExercicioNumericos(
-        int(resposta), exerciciosNumericos
+def numericDeletion(answer: str):
+    print("Numeric Deletion:" + answer)
+    if not spacedRepetitionUtilities.integerStringCheck(answer):
+        print("Numeric deletion: the answer is not integer")
+        return "Not avalid index."
+    numericExercise = spacedRepetitionFileHandler.getNumericExercise()
+    spacedRepetitionFileHandler.deleteNumericProblem(
+        int(answer), exerciciosNumericos
     )
-    return "Exercício Deletado"
+    return "Exercise deleted."
 
 
 def procedimentoDeDelecaoTeorica(resposta: str):
