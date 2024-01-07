@@ -2,192 +2,202 @@
 import random
 import time
 
+import chalenges
 import discord
 import numpy as np
 
-import DesafiosFileHandler
 import initialiseDirectories
 import settings
 import spacedRepetitionFileHandler
 import spacedRepetitionUtilities
 
 # variáveis globais
-placeHolder = {"mode":"normal"}
+placeHolder = {"mode": "normal"}
 # consiga o enunciado e exercício atual da repetição espaçada
 
 
 def findQuestionsInGreaterBoxes(lesserBox):
-    #import global variables
+    # import global variables
     global placeHolder
-    numeberOfWaitingDays=[1,2,4,7]
-    colorCode=["\001b[0m","\u001b[0;32m","\u001b[2;33m","\u001b[0;34m"]
-    boldColorCode=["\001b[1m","\u001b[1;32m","\u001b[1;33m","\u001b[0;34m"]
-    writtenNumbers=["zero","one","two","three"]
+    numeberOfWaitingDays = [1, 2, 4, 7]
+    colorCode = ["\001b[0m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
+    boldColorCode = ["\001b[1m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
+    writtenNumbers = ["zero", "one", "two", "three"]
     numericProblems = spacedRepetitionFileHandler.getNumericProblems()
     theoreticalProblems = spacedRepetitionFileHandler.getTheoreticalProblems()
     print("Get question:" + str(numericProblems) + str(theoreticalProblems))
-    #if lesser box is greater than four return(this is a recursion code)
-    if lesserBox>=4:
+    # if lesser box is greater than four return(this is a recursion code)
+    if lesserBox >= 4:
         print("Get questions: Box 4 reached")
         return "End of spaced repetition"
     # Try to find a problem from lesserBox
-    print("Get exercises:box"+str(lesserBox))
+    print("Get exercises:box" + str(lesserBox))
     for index in range(len(numericProblems)):
         print("Get questions: exercise" + str(index))
-        if numericProblems[index][
-            "box"
-        ] == lesserBox and numeberOfWaitingDays[lesserBox] <= spacedRepetitionUtilities.dayDifference(
-            numericExercises[index]["lastOpened"], time.time()
+        if numericProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
+            lesserBox
+        ] <= spacedRepetitionUtilities.dayDifference(
+            numericProblems[index]["lastOpened"], time.time()
         ):
             print("Get questions: chosen exercise " + str(numericProblems[index]))
-            placeHolder = {"problem":numericProblems[index],
-            "index":index,
-            "mode":"numeric"
+            placeHolder = {
+                "problem": numericProblems[index],
+                "index": index,
+                "mode": "numeric",
             }
             return (
-                "```ansi\n "+colorCode[lesserBox]+"Numeric box "+writtenNumber[lesserBox]+"\n"
+                "```ansi\n "
+                + colorCode[lesserBox]
+                + "Numeric box "
+                + writtenNumbers[lesserBox]
+                + "\n"
                 + numericProblems[index]["question"]
                 + "\u001b[0m\n```"
             )
-    #Now try finding from theoretical lesser box
-    for index in range(len(theoreticalproblems)):
+    # Now try finding from theoretical lesser box
+    for index in range(len(theoreticalProblems)):
         print("get questions: exercise" + str(index))
-        if theoreticalProblem[index][
-            "box"
-        ] == lesserBox and numberOfWaitingDays <= spacedRepetitionUtilities.dayDifference(
+        if theoreticalProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
+            index
+        ] <= spacedRepetitionUtilities.dayDifference(
             theoreticalProblems[index]["lastOpened"], time.time()
         ):
-            placeHolder = {"problem":theoreticalProblems[index],
-                           "index":index,
-                           "mode":"theoreticalWaiting"
-                           }
+            placeHolder = {
+                "problem": theoreticalProblems[index],
+                "index": index,
+                "mode": "theoreticalWaiting",
+            }
             print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
-            modo = "theoreticalWaiting"
+            mode = "theoreticalWaiting"
             return (
-                "```ansi\n "+boldColorCode[lesserBox]+"Theoretical box"+writtenNumber[lesserBox]+"\n"
+                "```ansi\n "
+                + boldColorCode[lesserBox]
+                + "Theoretical box"
+                + writtenNumbers[lesserBox]
+                + "\n"
                 + theoreticalProblems[index]["question"]
                 + "\n(Send any question to continue)"
                 + "\u001b[0m\n```"
             )
-    #Now try in the next box:
-    return findQuestionInGreaterBoxes(lesserBox+1)
-
-
+    # Now try in the next box:
+    return findQuestionsInGreaterBoxes(lesserBox + 1)
 
 
 def theoreticalWaiting():
-    #Get dependencies
+    # Get dependencies
     global placeHolder
-    # Finalize o modo de espera teórico
     print("Theoretical waiting: the waiting is over.")
     placeHolder["mode"] = "theoretical"
-    return "The answer was: \n" + placeHolder["problem"]["answer"] + "\n Did you get it right?(y,n)"
+    return (
+        "The answer was: \n"
+        + placeHolder["problem"]["answer"]
+        + "\n Did you get it right?(y,n)"
+    )
+
 
 def safelyDecreaseBox(initialBox):
-    return initialBox-1+int(initialBox==0)
+    return initialBox - 1 + int(initialBox == 0)
+
 
 def theoretical(answer: str):
-    #get dependencies
+    # get dependencies
     global placeHolder
     problems = spacedRepetitionFileHandler.getTheoreticalProblems()
-    #Apply exercise
+    # Apply exercise
     print("theoretical: Did User get it right?" + answer)
-    index=placeHolder["index"]
+    index = placeHolder["index"]
     problems[index]["lastOpened"] = int(time.time())
     answer = answer.lower()
     if answer.startswith("y"):
         problems[index]["box"] += 1
-        print(
-            "theoretical:"
-                + str(problems)
-            )
+        print("theoretical:" + str(problems))
         spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
-        placeHolder = {"mode":"normal"}
+        placeHolder = {"mode": "normal"}
         return "Congratulations, you got it right!!!"
-    elif resposta.startswith("n"):
-        problems[index]["box"]=SafelyDecreaseBox(problems[index]["box"])
-        problems[index]["errors"]+=1;
-        print(
-            "theoretical:"
-                + str(problems)
-            )
+    elif answer.startswith("n"):
+        problems[index]["box"] = SafelyDecreaseBox(problems[index]["box"])
+        problems[index]["errors"] += 1
+        print("theoretical:" + str(problems))
         spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
-        placeHolder = {"mode":"normal"}
+        placeHolder = {"mode": "normal"}
         return "Unfortunately you got it wrong. Better luck next time!"
-    #make the user put a valid input
+    # make the user put a valid input
     return "Input a valid answer 'y' or 'n'"
 
 
 def numeric(answer: str):
     print("Numeric:answer" + answer)
-    #verifies if the user inputed a valid answer
+    # verifies if the user inputed a valid answer
     if not spacedRepetitionUtilities.integerStringCheck(answer):
         print("Numeric: invalid non numeric input")
         return "Add a numeric answer"
     number = float(answer)
-    #get dependencies
+    # get dependencies
     global placeHolder
-    problems = spacedRepetitionFileHandler.getNumericExercise()
-    #Apply exercise
-    print(
-        "Numeric:"
-        + str(problems)
-    )
-    index=placeHolder["index"]
-    problems[index]["lastOpened"]=int(time.time())
-    if spacedRepetitionUtilities.compareValueS(
-        placeHolder["problem"]["answer"], number, placeHolder["problem"]["significantFigures"]
+    problems = spacedRepetitionFileHandler.getNumericProblems()
+    # Apply exercise
+    print("Numeric:" + str(problems))
+    index = placeHolder["index"]
+    problems[index]["lastOpened"] = int(time.time())
+    if spacedRepetitionUtilities.compareValues(
+        placeHolder["problem"]["answer"],
+        number,
+        placeHolder["problem"]["significantFigures"],
     ):
-        problems[index]["box"]+=1
-        print(
-            "Numeric:"
-            + str(problems)
-        )
+        problems[index]["box"] += 1
+        print("Numeric:" + str(problems))
         spacedRepetitionFileHandler.saveNumericProblems(problems)
-        placeHolder={"mode":"normal"}
+        placeHolder = {"mode": "normal"}
         return "Congratulations, you got it right!!!"
-    problems[index]["box"]=safelyDecreaseBox(problems[index]["box"])
+    problems[index]["box"] = safelyDecreaseBox(problems[index]["box"])
     problems[index]["errors"] += 1
     uncertainty = spacedRepetitionUtilities.percentualDeviation(
-    problems[index]["answer"], number
+        problems[index]["answer"], number
     )
-    placeHolder = {"mode":"normal"}
-    return "Unfortunately you missed by " + uncertainty + " the answer was "+str(number)+". Better luck next time!"
+    placeHolder = {"mode": "normal"}
+    return (
+        "Unfortunately you missed by "
+        + uncertainty
+        + ", the answer was "
+        + str(number)
+        + ". Better luck next time!"
+    )
+
 
 def numericAddition(answer: str):
     print("Numeric addition:" + answer)
-    #Check if the answer is a number
+    # Check if the answer is a number
     if not spacedRepetitionUtilities.floatStringCheck(answer):
         print("Numeric Addition:Non numeric answer")
         return "Add a valid numeric answer."
-    #Get dependencies
+    # Get dependencies
     global placeHolder
-    problems = spacedRepetitionFileHandler.getNumericExercise()
-    #Save exercise
+    problems = spacedRepetitionFileHandler.getNumericProblems()
+    # Save exercise
     question = placeHolder["question"]
     answerFinal = float(answer)
-    significantDigits = spacedRepetitionUtilities.stringSignificantFigures(answer)
+    significantFigures = spacedRepetitionUtilities.stringSignificantFigures(answer)
     spacedRepetitionFileHandler.addNumericProblem(
-        question, answerFinal, significantFigures, numericExercises
+        question, answerFinal, significantFigures, problems
     )
-    placeHolder = {"mode":"normal"}
+    placeHolder = {"mode": "normal"}
     print("Numeric addition:problem added")
-    return "Problem (" + enunciado + ") Added"
+    return "Problem (" + question + ") Added"
 
 
-def theoreticalDeletion(answer: str):
+def theoreticalAddition(answer: str):
     print("Theoretical addition:" + answer)
-    #import the dependencies
+    # import the dependencies
     global placeHolder
-    problems=spacedRepetitionFileHandler.getTheoreticalProblems()
-    #save the exercise
+    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
+    # save the exercise
     question = placeHolder["answer"]
     spacedRepetitionFileHandler.addTheoreticalcProblem(
-        question, answer, theoricExercise
+        question, answer, problems
     )
-    placeHolder={"mode":"normal"}
+    placeHolder = {"mode": "normal"}
     print("Theoretical Addition : problem added")
-    return "Problem (" + enunciado + ") added."
+    return "Problem (" + question + ") added."
 
 
 def numericDeletion(answer: str):
@@ -195,23 +205,19 @@ def numericDeletion(answer: str):
     if not spacedRepetitionUtilities.integerStringCheck(answer):
         print("Numeric deletion: the answer is not integer")
         return "Not a valid index."
-    problems = spacedRepetitionFileHandler.getNumericExercise()
-    spacedRepetitionFileHandler.deleteNumericProblem(
-        int(answer), problems
-    )
+    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
+    spacedRepetitionFileHandler.deleteNumericProblem(int(answer), problems)
     return "Exercise deleted."
 
 
 def theoreticalDeletion(answer: str):
     print("Theoretical Deletion" + answer)
-    if not spacedRepetitionUtilities.integerStringCheck(string):
+    if not spacedRepetitionUtilities.integerStringCheck(answer):
         print("Theoretical Deletion: the index is not an integer")
         return "Not a valid index."
     # Delete o exercício de índice da resposta
     problems = spacedRepetitionFileHandler.getTheoreticalProblems()
-    spacedRepetitionFileHandler.deletarExercicioTeorico(
-        int(answer), problems
-    )
+    spacedRepetitionFileHandler.deleteTheoreticalExercise(int(answer), problems)
     return "Deleted Exercise"
 
 
