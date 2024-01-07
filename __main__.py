@@ -2,7 +2,6 @@
 import random
 import time
 
-import chalenges
 import discord
 import numpy as np
 
@@ -192,9 +191,7 @@ def theoreticalAddition(answer: str):
     problems = spacedRepetitionFileHandler.getTheoreticalProblems()
     # save the exercise
     question = placeHolder["answer"]
-    spacedRepetitionFileHandler.addTheoreticalcProblem(
-        question, answer, problems
-    )
+    spacedRepetitionFileHandler.addTheoreticalcProblem(question, answer, problems)
     placeHolder = {"mode": "normal"}
     print("Theoretical Addition : problem added")
     return "Problem (" + question + ") added."
@@ -221,134 +218,6 @@ def theoreticalDeletion(answer: str):
     return "Deleted Exercise"
 
 
-def procedimentoDeAdicaoDeMateriais(resposta: str):
-    # Consiga Dependencias
-    global exercicioAtual
-    global modo
-    print("Adição de materiais:" + resposta)
-    # Comece a adicionar
-    exercicioAtual["nome"] = resposta
-    modo = "esperaSubdivisao"
-    exercicioAtual["subdivisoes"] = []
-    return (
-        "Começando a adicionar Material " + resposta + "\nQual o nome da subdivisão 1?"
-    )
-
-
-def procedimentoAdicaoSubdivisoes(resposta: str):
-    # consiga as dependencias
-    global exercicioAtual
-    global modo
-    # Verifique se a resposta é válida:
-    if DesafiosFileHandler.verificarPresencaArrouba(resposta):
-        return (
-            "Adicione uma resposta sem @,obrigado.\n Qual o nome da subdivisão "
-            + str(len(exercicioAtual["subdivisoes"]))
-            + "?(Digite c# para terminar)"
-        )
-    # Verifique se é para cancelar
-    print("Adição de subdivisões" + resposta)
-    if len(exercicioAtual) != 0 and resposta == "c#":
-        modo = "esperaNumeroExercicios"
-        exercicioAtual["exercicios"] = []
-        return (
-            "Pronto. \n Qual o número de exercícios("
-            + exercicioAtual["subdivisoes"][0]
-            + ")?"
-        )
-    # Adicione a subdivisão
-    exercicioAtual["subdivisoes"].append(resposta)
-    return (
-        "Qual o nome da subdivisão "
-        + str(len(exercicioAtual["subdivisoes"]) + 1)
-        + "?(Digite c# para terminar)"
-    )
-
-
-def procedimentoFinalAdicaoMateriais(resposta: str):
-    print("Adição de numéro de exercício em material:" + resposta)
-    # consiga as dependencias
-    global exercicioAtual
-    global modo
-    # Cheque se é válido:
-    if not DesafiosFileHandler.checagemInteiraDeStrings(resposta):
-        return (
-            "Não é um número inteiro, adicione uma resposta válida\n Qual o número de exercícios("
-            + exercicioAtual["subdivisoes"][len(exercicioAtual["exercicios"])]
-            + ")?"
-        )
-    # Adicione o número na dependencia
-    exercicioAtual["exercicios"].append(int(resposta))
-    if len(exercicioAtual["exercicios"]) == len(exercicioAtual["subdivisoes"]):
-        # Verifique se não é o último à adicionar se for finalize
-        materiais = DesafiosFileHandler.ConseguirDesafios()
-        materiais.append(exercicioAtual)
-        print(materiais)
-        DesafiosFileHandler.salvarDesafios(materiais)
-        stringFinal = "material: " + exercicioAtual["nome"] + " com subdivisões"
-        for index in range(len(exercicioAtual["exercicios"])):
-            stringFinal += (
-                "\n***"
-                + exercicioAtual["subdivisoes"][index]
-                + "("
-                + str(exercicioAtual["exercicios"][index])
-                + " exercicios)"
-            )
-        stringFinal += "adicionado"
-        modo = "normal"
-        exercicioAtual = {}
-        return stringFinal
-    return (
-        "Qual o número de exercícios("
-        + exercicioAtual["subdivisoes"][len(exercicioAtual["exercicios"])]
-        + ")?"
-    )
-
-
-def delecaoDeMateriais(resposta: str):
-    print("Deleção de materiais: " + resposta)
-    # Verifique se é válido
-    if not DesafiosFileHandler.checagemInteiraDeStrings(resposta):
-        return "resposta inválida"
-    # Delete o exercício
-    materiais = DesafiosFileHandler.ConseguirDesafios()
-    nomeADeletar = materiais[int(resposta)]["nome"]
-    materiais.pop(int(resposta))
-    DesafiosFileHandler.salvarDesafios(materiais)
-    return "Material(" + nomeADeletar + ") deletado."
-
-
-def randomizarExercicio():
-    # Consegue as dependências
-    materiais = DesafiosFileHandler.ConseguirDesafios()
-    probabilidades = DesafiosFileHandler.probabilidade(materiais)
-    print(probabilidades)
-    # Joga um dado real de 0 até 1
-    dadoIncontavel = 1 - random.random()
-    print(dadoIncontavel)
-    # Escolha um material
-    materialEscolhido = 0
-    for index in range(len(probabilidades)):
-        if dadoIncontavel < probabilidades[index]:
-            materialEscolhido = index
-            break
-        dadoIncontavel -= probabilidades[index]
-    # Escolha um exercício:
-    exercicioEscolhido = random.randrange(
-        1, np.sum(materiais[materialEscolhido]["exercicios"]) + 1
-    )
-    # interprete o exercício
-    for index in range(len(materiais[materialEscolhido]["exercicios"])):
-        if materiais[materialEscolhido]["exercicios"][index] >= exercicioEscolhido:
-            return (
-                materiais[materialEscolhido]["nome"]
-                + "("
-                + materiais[materialEscolhido]["subdivisoes"][index]
-                + ") exercício "
-                + str(exercicioEscolhido)
-                + "."
-            )
-        exercicioEscolhido -= materiais[materialEscolhido]["exercicios"][index]
 
 
 def run():
