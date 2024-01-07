@@ -20,7 +20,7 @@ def integerStringCheck(checkedString:str):
         return False
     return True
 def saveChallenges(materials):
-    if not checkChallenges(mateials):
+    if not checkChallenges(materials):
         return False
     #write the names
     nameFile = open(".spacedRepetition/data/challenges/names.txt","w",encoding="utf-8")
@@ -37,16 +37,16 @@ def saveChallenges(materials):
             subdivisionsPH+=materials[index]["subdivision"][indexPrime]
             if indexPrime+1<len(materials[index]["subdivisios"]):
                 subdivisionsPH+="@"
-        subdivisionFile.write(subdivisionsPH)
+        subdivisionsFile.write(subdivisionsPH)
         if index+1<len(materials):
-            subdivisionFile.write("\n")
-    subdivisionFile.close()
+            subdivisionsFile.write("\n")
+    subdivisionsFile.close()
     #Write the number of problem
     problemFile = open(".spacedRepetition/data/challenges/problems.txt","a",encoding="utf-8")
     for index in range(len(materials)):
-        problem=""
+        problemPH=""
         for indexPrime in range(len(materials[index]["exercise"])):
-            probllemPH+=str(materials[index]["exercise"][indexPrime])
+            problemPH+=str(materials[index]["exercise"][indexPrime])
             if indexPrime+1<len(materials[index]["exercise"]):
                 problemPH+=" "
         problemFile.write(problemPH)
