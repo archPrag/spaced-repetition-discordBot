@@ -57,35 +57,35 @@ def saveChallenges(materials):
 
 def ConseguirDesafios():
     try:
-        #Consegue os Nomes
-        fileNomesDosDesafios = open(".NomesDosDesafios.txt","r",encoding="utf-8")
-        nomesPH=fileNomesDosDesafios.read().split("\n")
-        fileNomesDosDesafios.close()
-        #Consegue as subdivisões
-        fileSubdivisoes = open(".DesafiosSubdivisoes.txt","r",encoding="utf-8")
-        subdivisoesPH=fileSubdivisoes.read().split("\n")
-        for index in range(len(subdivisoesPH)):
-            subdivisoesPH[index]=subdivisoesPH[index].split("@")
-        fileSubdivisoes.close()
-        #Consegue o número de exercícios
-        fileExercicios = open(".DesafiosExercicios.txt","r",encoding="utf-8")
-        exerciciosPH=fileExercicios.read().split("\n")
-        for index in range(len(exerciciosPH)):
-            exerciciosPH[index]=exerciciosPH[index].split(" ")
-            for indexPrime in range(len(exerciciosPH[index])):
-                exerciciosPH[index][indexPrime]=int(exerciciosPH[index][indexPrime])
-        fileExercicios.close()
+        #names
+        nameFile = open(".spacedRepetition/data/challenges/names.txt","r",encoding="utf-8")
+        namesPH=nameFile.read().split("\n")
+        nameFile.close()
+        #subdivisions
+        subdivisionsFile= open(".spacedRepetition/data/challenges/subdivisions.txt","r",encoding="utf-8")
+        subdivisionsPH=subdivisionsFile.read().split("\n")
+        for index in range(len(subdivisionsPH)):
+            subdivisionsPH[index]=subdivisionsPH[index].split("@");
+        subdivisionsFile.close()
+        #number of problems
+        problemFile = open(".spacedRepetition/data/challenges/problems.txt","a",encoding="utf-8")
+        problemPH=problemFile.read().split("\n")
+        for index in range(len(problemPH)):
+            problemPH[index]=problemPH[index].split(" ")
+            for indexPrime in range(len(problemPH[index])):
+                problemPH[index][indexPrime]=int(problemsPH[index][indexPrime])
+        problemFile.close()
         #Concatena o dicionário
-        materiais=[]
-        for index in range(len(nomesPH)):
-            materiais.append({
-            "nome":nomesPH[index],
-            "subdivisoes":subdivisoesPH[index],
-            "exercicios":exerciciosPH[index]
+        materials=[]
+        for index in range(len(namesPH)):
+            materials.append({
+            "names":namesPH[index],
+            "subdivisions":subdivisionsPH[index],
+            "exercicios":problemPH[index]
         })
-        return materiais
+        return materials
     except:
-        #Caso a file estiver vazia retorne uma array vazia
+        #here to incapsulate the empty problem
         return[]
 
 
