@@ -76,7 +76,7 @@ def saveChallenges(materials):
     return False
 
 
-def ConseguirDesafios():
+def getChalenges():
     try:
         # names
         nameFile = open(
@@ -139,28 +139,28 @@ def probability(materials):
     return notNormalizedProbability / np.sum(notNormalizedProbability)
 
 
-def verificarPresencaArrouba(texto: str):
-    for character in texto:
+def verifyAtCharacter(text: str):
+    for character in text:
         if character == "@":
             return True
     return False
 
 
-def materiaisString(materiais):
-    textoFinal = ["materiais randomizados :"]
-    for index in range(len(materiais)):
-        textoPH = str(index) + "-" + materiais[index]["nome"]
-        for indexPrime in range(len(materiais[index]["exercicios"])):
-            textoPH += (
+def materialsString(materials):
+    finalText = ["Randomized materials"]
+    for index in range(len(materials)):
+        textPH = str(index) + "-" + materials[index]["name"]
+        for indexPrime in range(len(materials[index]["problems"])):
+            textPH += (
                 "\n  +"
-                + materiais[index]["subdivisoes"][indexPrime]
+                + materials[index]["subdivisions"][indexPrime]
                 + "|"
-                + str(materiais[index]["exercicios"][indexPrime])
+                + str(materials[index]["problems"][indexPrime])
                 + " exercícios."
             )
-        textoFinal.append(textoPH)
-    textoFinal.append("pronto")
-    return textoFinal
+        finalText.append(textPH)
+    finalText.append("done")
+    return finalText
 
 
 initializeFiles()
