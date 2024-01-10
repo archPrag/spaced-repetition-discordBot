@@ -1,6 +1,8 @@
 # coding: utf-8
 import time
+
 import discord
+
 import settings
 import spacedRepetitionFileHandler
 import spacedRepetitionUtilities
@@ -71,7 +73,7 @@ def findQuestionsInGreaterBoxes(lesserBox):
                 + "\n"
                 + theoreticalProblems[index]["question"]
                 + "\n(Send any question to continue)"
-                + "\u001b[0m\n```"
+                + ".\u001b[0m\n```"
             )
     # Now try in the next box:
     return findQuestionsInGreaterBoxes(lesserBox + 1)
@@ -262,14 +264,31 @@ def run():
             await message.channel.send(theoretical(message.content))
             await message.channel.send(findQuestionsInGreaterBoxes(0))
         elif message.content.startswith("!NA ") and placeHolder["mode"] == "normal":
-            placeHolder["problem"]["question"] = message.content[4:]
-            modo = "numericAddition"
+            placeHolder = {
+                "mode": "numericAddition",
+                "problem": {
+                    "question": message.content[4:],
+                    "answer": 0,
+                    "lastOpened": 0,
+                    "box": 0,
+                    "error": 0,
+                },
+            }
+            placeHolder["mode"] = "numericAddition"
             await message.channel.send("what is the numeric answer?")
         elif placeHolder["mode"] == "numeicAddition":
             await message.channel.send(numericAddition(message.content))
         elif message.content.startswith("!TA ") and placeHolder["mode"] == "normal":
-            placeHolder["problem"]["question"] = message.content[4:]
-            modo = "theoretical Addition"
+            placeHolder = {
+                "mode": "theoreticalAddition",
+                "problem": {
+                    "question": message.content[4:],
+                    "answer": "",
+                    "lastOpened": 0,
+                    "box": 0,
+                    "error": 0,
+                },
+            }
             await message.channel.send("Whatis the theoretical answer?")
         elif placeHolder["mode"] == "theoreticalAddition":
             await message.channel.send(theoreticalAddition(message.content))
