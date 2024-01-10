@@ -211,7 +211,7 @@ def theoreticalDeletion(answer: str):
     # Delete o exercício de índice da resposta
     problems = spacedRepetitionFileHandler.getTheoreticalProblems()
     spacedRepetitionFileHandler.deleteTheoreticalExercise(int(answer), problems)
-    return "Deleted Exercise"
+    return "Exercise deleted."
 
 
 def run():
@@ -241,7 +241,7 @@ def run():
             # list some exercises
             await message.channel.send(spacedRepetitionFileHandler.getHelp())
         elif (
-            message.content.startswith("!ListAll") and placeHolder["model"] == "normal"
+            message.content.startswith("!ListAll") and placeHolder["mode"] == "normal"
         ):
             # Send all exercises
             for line in spacedRepetitionFileHandler.listProblems():
@@ -292,7 +292,7 @@ def run():
             await message.channel.send(theoreticalAddition(message.content))
         elif placeHolder["mode"] == "normal" and message.content.startswith("!ND "):
             await message.channel.send(numericDeletion(message.content[4:]))
-        elif placeHolder == "normal" and message.content.startswith("!TD "):
+        elif placeHolder["mode"] == "normal" and message.content.startswith("!TD "):
             await message.channel.send(theoreticalDeletion(message.content[4:]))
 
     client.run(settings.DISCORD_API_SECRET)
