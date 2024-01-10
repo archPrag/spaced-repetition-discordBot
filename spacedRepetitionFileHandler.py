@@ -107,7 +107,7 @@ def getTheoreticalProblems():
                     "box": int(data[index][0]),
                     "answer": answers[index],
                     "lastOpened": float(data[index][1]),
-                    "error": int(data[index][2]),
+                    "errors": int(data[index][2]),
                 }
             )
         return theoreticalProblems

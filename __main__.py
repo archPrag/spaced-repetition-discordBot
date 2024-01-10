@@ -16,8 +16,8 @@ def findQuestionsInGreaterBoxes(lesserBox):
     # import global variables
     global placeHolder
     numeberOfWaitingDays = [1, 2, 4, 7]
-    colorCode = ["\001b[0m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
-    boldColorCode = ["\001b[1m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
+    colorCode = ["\001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
+    boldColorCode = ["\001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
     writtenNumbers = ["zero", "one", "two", "three"]
     numericProblems = spacedRepetitionFileHandler.getNumericProblems()
     theoreticalProblems = spacedRepetitionFileHandler.getTheoreticalProblems()
@@ -110,7 +110,7 @@ def theoretical(answer: str):
         placeHolder = {"mode": "normal"}
         return "Congratulations, you got it right!!!"
     elif answer.startswith("n"):
-        problems[index]["box"] = SafelyDecreaseBox(problems[index]["box"])
+        problems[index]["box"] = safelyDecreaseBox(problems[index]["box"])
         problems[index]["errors"] += 1
         print("theoretical:" + str(problems))
         spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
