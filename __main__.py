@@ -1,6 +1,7 @@
 # coding: utf-8
 import random
 import time
+from logging import PlaceHolder
 
 import discord
 import numpy as np
@@ -218,8 +219,6 @@ def theoreticalDeletion(answer: str):
     return "Deleted Exercise"
 
 
-
-
 def run():
     intents = discord.Intents.default()
     intents.message_content = True
@@ -233,82 +232,57 @@ def run():
 
     @client.event
     async def on_message(message):  # receba uma mensagem do discord
-        # importe as variáveis Globais
-        global modo
-        global exercicioAtual
-        # verifique se o bot foi quem enviou
+        # Import global variables
+        global placeHolder
+        # Verify if it's not the bot's message
         if message.author == client.user:
             return
         elif message.content.startswith("!Can"):
-            # Pare tudo que estiver fazendo e limpe em outras palavras cancele
-            modo = "normal"
-            exercicioAtual = {}
-            print("Cancelado")
+            # Reestart bots cache
+            placeHolder = {"mode": "normal"}
+            print("Canceled")
             await message.channel.send("```ansi\n\u001b[0;31mCancelar\u001b[0m\n```")
-        elif message.content.startswith("!Help") and modo == "normal":
-            # mande o textão com os comandos
-            await message.channel.send(spacedRepetitionFileHandler.conseguirAjuda())
-        elif message.content.startswith("!ListAll") and modo == "normal":
-            # liste os exercícios
-            for line in spacedRepetitionFileHandler.listarExercicios():
+        elif message.content.startswith("!Help") and placeHolder["mode"] == "normal":
+            # list some exercises
+            await message.channel.send(spacedRepetitionFileHandler.getHelp())
+        elif (
+            message.content.startswith("!ListAll") and placeHolder["model"] == "normal"
+        ):
+            # Send all exercises
+            for line in spacedRepetitionFileHandler.listProblems():
                 await message.channel.send(line)
-        elif message.content.startswith("!List") and modo == "normal":
+        elif message.content.startswith("!List") and placeHolder["mode"] == "normal":
             # liste os exercícios incompletos
-            for line in spacedRepetitionFileHandler.listarExerciciosIncompletos():
+            for line in spacedRepetitionFileHandler.listUnfinishedProblems():
                 await message.channel.send(line)
-        elif message.content.startswith("!Exercise") and modo == "normal":
-            await message.channel.send(conseguirEnunciado())
-        elif message.content.startswith("!GenExercise") and modo == "normal":
-            await message.channel.send(randomizarExercicio())
-        elif modo == "numerico":
-            await message.channel.send(procedimentoNumerico(message.content))
-            await message.channel.send(conseguirEnunciado())
-        elif modo == "esperaTeorica":
-            await message.channel.send(procedimentoDeEsperaTeorica())
-        elif modo == "teorico":
-            await message.channel.send(procedimentoTeorico(message.content))
-            await message.channel.send(conseguirEnunciado())
-        elif message.content.startswith("!NA ") and modo == "normal":
-            exercicioAtual["enunciado"] = message.content[4:]
-            modo = "adicaoNumerica"
-            await message.channel.send("Qual o gabarito numérico?")
-        elif modo == "adicaoNumerica":
-            await message.channel.send(adicaoNumerica(message.content))
-        elif message.content.startswith("!TA ") and modo == "normal":
-            exercicioAtual["enunciado"] = message.content[4:]
-            modo = "adicaoTeorica"
-            await message.channel.send("Qual o gabarito teórico?")
-        elif modo == "adicaoTeorica":
-            await message.channel.send(adicaoTeorica(message.content))
-        elif modo == "normal" and message.content.startswith("!ND "):
-            await message.channel.send(
-                procedimentoDeDelecaoNumerica(message.content[4:])
-            )
-        elif modo == "normal" and message.content.startswith("!TD "):
-            await message.channel.send(
-                procedimentoDeDelecaoTeorica(message.content[4:])
-            )
-        elif modo == "normal" and message.content.startswith("!MA "):
-            await message.channel.send(
-                procedimentoDeAdicaoDeMateriais(message.content[4:])
-            )
-        elif modo == "normal" and message.content.startswith("!MD "):
-            await message.channel.send(delecaoDeMateriais(message.content[4:]))
-        elif modo == "normal" and message.content.startswith("!GenList"):
-            for line in DesafiosFileHandler.materiaisString(
-                DesafiosFileHandler.ConseguirDesafios()
-            ):
-                await message.channel.send(line)
-        elif modo == "esperaSubdivisao":
-            await message.channel.send(procedimentoAdicaoSubdivisoes(message.content))
-        elif modo == "esperaNumeroExercicios":
-            await message.channel.send(
-                procedimentoFinalAdicaoMateriais(message.content)
-            )
-        elif message.content.startswith("!"):
-            await message.channel.send(
-                "Isso não é um comando válido: digite !Help para ajuda"
-            )
+        elif (
+            message.content.startswith("!Exercise") and placeHolder["mode"] == "normal"
+        ):
+            await message.channel.send(findQuestionsInGreaterBoxes(0))
+        elif placeHolder["mode"] == "numerico":
+            await message.channel.send(numeric(message.content))
+            await message.channel.send(findQuestionsInGreaterBoxes(0))
+        elif placeHolder["mode"] == "theoricalWaiting":
+            await message.channel.send(theoreticalWaiting())
+        elif placeHolder["mode"] == "teoretical":
+            await message.channel.send(theoretical(message.content))
+            await message.channel.send(findQuestionsInGreaterBoxes(0))
+        elif message.content.startswith("!NA ") and placeHolder["mode"] == "normal":
+            placeHolder["problem"]["question"] = message.content[4:]
+            modo = "numericAddition"
+            await message.channel.send("what is the numeric answer?")
+        elif placeHolder["mode"] == "numeicAddition":
+            await message.channel.send(numericAddition(message.content))
+        elif message.content.startswith("!TA ") and placeHolder["mode"] == "normal":
+            placeHolder["problem"]["question"] = message.content[4:]
+            modo = "theoretical Addition"
+            await message.channel.send("Whatis the theoretical answer?")
+        elif placeHolder["mode"] == "theoreticalAddition":
+            await message.channel.send(theoreticalAddition(message.content))
+        elif placeHolder["mode"] == "normal" and message.content.startswith("!ND "):
+            await message.channel.send(numericDeletion(message.content[4:]))
+        elif placeHolder == "normal" and message.content.startswith("!TD "):
+            await message.channel.send(theoreticalDeletion(message.content[4:]))
 
     client.run(settings.DISCORD_API_SECRET)
 
