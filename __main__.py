@@ -170,7 +170,7 @@ def numericAddition(answer: str):
     global placeHolder
     problems = spacedRepetitionFileHandler.getNumericProblems()
     # Save exercise
-    question = placeHolder["question"]
+    question = placeHolder["problem"]["question"]
     answerFinal = float(answer)
     significantFigures = spacedRepetitionUtilities.stringSignificantFigures(answer)
     spacedRepetitionFileHandler.addNumericProblem(
@@ -274,9 +274,8 @@ def run():
                     "error": 0,
                 },
             }
-            placeHolder["mode"] = "numericAddition"
-            await message.channel.send("what is the numeric answer?")
-        elif placeHolder["mode"] == "numeicAddition":
+            await message.channel.send("What is the numeric answer?")
+        elif placeHolder["mode"] == "numericAddition":
             await message.channel.send(numericAddition(message.content))
         elif message.content.startswith("!TA ") and placeHolder["mode"] == "normal":
             placeHolder = {
@@ -289,7 +288,7 @@ def run():
                     "error": 0,
                 },
             }
-            await message.channel.send("Whatis the theoretical answer?")
+            await message.channel.send("What is the theoretical answer?")
         elif placeHolder["mode"] == "theoreticalAddition":
             await message.channel.send(theoreticalAddition(message.content))
         elif placeHolder["mode"] == "normal" and message.content.startswith("!ND "):

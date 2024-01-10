@@ -179,8 +179,8 @@ def addNumericProblem(question, answer, significantFigure, problems):
             "box": 0,
             "answer": float(answer),
             "significantFigures": int(significantFigure),
-            "ultimaAbertura": int(time.time()),
-            "erros": 0,
+            "lastOpened": int(time.time()),
+            "errors": 0,
         }
     )
     saveNumericProblems(problems)
@@ -202,12 +202,12 @@ def addTheoreticalcProblem(question, answer, problems):
             "errors": 0,
         }
     )
-    saveTheoreticalProblem(problems)
+    saveTheoreticalProblems(problems)
 
 
 def deleteTheoreticalExercise(index, exerciciosAtuais):
     exerciciosAtuais.pop(index)
-    saveTheoreticalProblem(exerciciosAtuais)
+    saveTheoreticalProblems(exerciciosAtuais)
     return exerciciosAtuais
 
 
