@@ -23,7 +23,7 @@ def findQuestionsInGreaterBoxes(lesserBox):
     # if lesser box is greater than four return(this is a recursion code)
     if lesserBox >= 4:
         print("Get questions: Box 4 reached")
-        return "End of spaced repetition"
+        return "End of spaced repetition."
     # Try to find a problem from lesserBox
     print("Get exercises:box" + str(lesserBox))
     for index in range(len(numericProblems)):
@@ -46,7 +46,7 @@ def findQuestionsInGreaterBoxes(lesserBox):
                 + writtenNumbers[lesserBox]
                 + "\n"
                 + numericProblems[index]["question"]
-                + "\u001b[0m\n```"
+                + ".\u001b[0m\n```"
             )
     # Now try finding from theoretical lesser box
     for index in range(len(theoreticalProblems)):

@@ -6,14 +6,16 @@ import time
 def directories():
     print("initialyzer: trying to create directories")
     try:
-        os.mkdir('.spacedRepetition')
+        os.mkdir(".spacedRepetition")
     except:
         print("initialyzer:.spacedRepetition already there")
 
     try:
-        os.mkdir('.spacedRepetition/data')
+        os.mkdir(".spacedRepetition/data")
     except:
         print("initialyzer:.spacedRepetition/data already there")
+
+
 def initialiseFiles():
     directories()
     # Ensures the existence of data files
@@ -40,13 +42,13 @@ def initialiseFiles():
 def getNumericProblems():
     # Get the questions
     numericQuestionFile = open(
-        ".spacedRepetition/data/numericQuestions", "a", encoding="utf-8"
+        ".spacedRepetition/data/numericQuestions", "r", encoding="utf-8"
     )
     questions = numericQuestionFile.read()
     questions = questions.split("\n")
     numericQuestionFile.close()
     # Get the Data
-    numericDataFile = open(".spacedRepetition/data/numericData", "a", encoding="utf-8")
+    numericDataFile = open(".spacedRepetition/data/numericData", "r", encoding="utf-8")
     data = numericDataFile.read()
     data = data.split("\n")
     for index in range(len(data)):
@@ -75,20 +77,20 @@ def getNumericProblems():
 def getTheoreticalProblems():
     # Get Questions
     theoreticalQuestionFile = open(
-        ".spacedRepetition/data/teoricQuestions", "a", encoding="utf-8"
+        ".spacedRepetition/data/teoricQuestions", "r", encoding="utf-8"
     )
     questions = theoreticalQuestionFile.read()
     questions = questions.split("\n")
     theoreticalQuestionFile.close()
     # Get Answers
     theoreticalAnswerFile = open(
-        ".spacedRepetition/data/teoricAnswers", "a", encoding="utf-8"
+        ".spacedRepetition/data/teoricAnswers", "r", encoding="utf-8"
     )
     answers = theoreticalAnswerFile.read()
     answers = answers.split("\n")
     theoreticalAnswerFile.close()
     theoreticalDataFile = open(
-        ".spacedRepetition/data/teoricData", "a", encoding="utf-8"
+        ".spacedRepetition/data/teoricData", "r", encoding="utf-8"
     )
     data = theoreticalDataFile.read()
     data = data.split("\n")
@@ -170,7 +172,7 @@ def saveTheoreticalProblems(problems):
     theoreticalDataFile.close()
 
 
-def addNumericProblem(question, answer, significantFigure,problems):
+def addNumericProblem(question, answer, significantFigure, problems):
     problems.append(
         {
             "question": question,
@@ -272,7 +274,9 @@ def listUnfinishedProblems():
                 + str(problem["errors"])
             )
             counter += 1
-    listProblems.append("All problems have been listed.-" + str(counter) + " unfinished problems.")
+    listProblems.append(
+        "All problems have been listed.-" + str(counter) + " unfinished problems."
+    )
     return listProblems
 
 
