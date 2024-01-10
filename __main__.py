@@ -187,7 +187,7 @@ def theoreticalAddition(answer: str):
     global placeHolder
     problems = spacedRepetitionFileHandler.getTheoreticalProblems()
     # save the exercise
-    question = placeHolder["answer"]
+    question = placeHolder["problem"]["question"]
     spacedRepetitionFileHandler.addTheoreticalcProblem(question, answer, problems)
     placeHolder = {"mode": "normal"}
     print("Theoretical Addition : problem added")
