@@ -26,13 +26,13 @@ def initialiseFiles():
     numericQuestionFile.close()
     numericDataFile.close()
     theoreticalQuestionFile = open(
-        ".spacedRepetition/data/teoricQuestions", "a", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalQuestions", "a", encoding="utf-8"
     )
     theoreticalDataFile = open(
-        ".spacedRepetition/data/teoricData", "a", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalData", "a", encoding="utf-8"
     )
     theoreticalAnswerFile = open(
-        ".spacedRepetition/data/teoricAnswers", "a", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalAnswers", "a", encoding="utf-8"
     )
     theoreticalQuestionFile.close()
     theoreticalAnswerFile.close()
@@ -77,20 +77,20 @@ def getNumericProblems():
 def getTheoreticalProblems():
     # Get Questions
     theoreticalQuestionFile = open(
-        ".spacedRepetition/data/teoricQuestions", "r", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalQuestions", "r", encoding="utf-8"
     )
     questions = theoreticalQuestionFile.read()
     questions = questions.split("\n")
     theoreticalQuestionFile.close()
     # Get Answers
     theoreticalAnswerFile = open(
-        ".spacedRepetition/data/teoricAnswers", "r", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalAnswers", "r", encoding="utf-8"
     )
     answers = theoreticalAnswerFile.read()
     answers = answers.split("\n")
     theoreticalAnswerFile.close()
     theoreticalDataFile = open(
-        ".spacedRepetition/data/teoricData", "r", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalData", "r", encoding="utf-8"
     )
     data = theoreticalDataFile.read()
     data = data.split("\n")
@@ -145,13 +145,13 @@ def saveNumericProblems(problems):
 
 def saveTheoreticalProblems(problems):
     theoreticalQuestionFile = open(
-        ".spacedRepetition/data/teoricQuestions", "w", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalQuestion", "w", encoding="utf-8"
     )
     theoreticalDataFile = open(
-        ".spacedRepetition/data/teoricData", "w", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalData", "w", encoding="utf-8"
     )
     theoreticalAnswerFile = open(
-        ".spacedRepetition/data/teoricAnswers", "w", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalAnswer", "w", encoding="utf-8"
     )
     for index in range(len(problems)):
         theoreticalQuestionFile.write(problems[index]["question"])
