@@ -64,7 +64,6 @@ def findQuestionsInGreaterBoxes(lesserBox):
                 "mode": "theoreticalWaiting",
             }
             print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
-            mode = "theoreticalWaiting"
             return (
                 "```ansi\n "
                 + boldColorCode[lesserBox]
@@ -255,12 +254,12 @@ def run():
             message.content.startswith("!Exercise") and placeHolder["mode"] == "normal"
         ):
             await message.channel.send(findQuestionsInGreaterBoxes(0))
-        elif placeHolder["mode"] == "numerico":
+        elif placeHolder["mode"] == "numeric":
             await message.channel.send(numeric(message.content))
             await message.channel.send(findQuestionsInGreaterBoxes(0))
-        elif placeHolder["mode"] == "theoricalWaiting":
+        elif placeHolder["mode"] == "theoreticalWaiting":
             await message.channel.send(theoreticalWaiting())
-        elif placeHolder["mode"] == "teoretical":
+        elif placeHolder["mode"] == "theoretical":
             await message.channel.send(theoretical(message.content))
             await message.channel.send(findQuestionsInGreaterBoxes(0))
         elif message.content.startswith("!NA ") and placeHolder["mode"] == "normal":
