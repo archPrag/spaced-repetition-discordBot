@@ -3,7 +3,19 @@ import os
 import time
 
 
+def directories():
+    print("initialyzer: trying to create directories")
+    try:
+        os.mkdir('.spacedRepetition')
+    except:
+        print("initialyzer:.spacedRepetition already there")
+
+    try:
+        os.mkdir('.spacedRepetition/data')
+    except:
+        print("initialyzer:.spacedRepetition/data already there")
 def initialiseFiles():
+    directories()
     # Ensures the existence of data files
     numericQuestionFile = open(
         ".spacedRepetition/data/numericQuestions", "a", encoding="utf-8"
@@ -23,8 +35,6 @@ def initialiseFiles():
     theoreticalQuestionFile.close()
     theoreticalAnswerFile.close()
     theoreticalDataFile.close()
-    helpFile = open("help.txt", "a", encoding="utf-8")
-    helpFile.close
 
 
 def getNumericProblems():

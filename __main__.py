@@ -1,12 +1,6 @@
 # coding: utf-8
-import random
 import time
-from logging import PlaceHolder
-
 import discord
-import numpy as np
-
-import initialiseDirectories
 import settings
 import spacedRepetitionFileHandler
 import spacedRepetitionUtilities
