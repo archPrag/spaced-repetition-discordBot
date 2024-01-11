@@ -53,6 +53,7 @@ def getNumericProblems():
     data = data.split("\n")
     for index in range(len(data)):
         data[index] = data[index].split(" ")
+    print(data)
     numericDataFile.close()
     # Merge everything
     numericProblems = []

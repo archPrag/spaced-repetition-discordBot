@@ -54,7 +54,7 @@ def findQuestionsInGreaterBoxes(lesserBox):
     for index in range(len(theoreticalProblems)):
         print("get questions: exercise" + str(index))
         if theoreticalProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
-            index
+            lesserBox
         ] <= spacedRepetitionUtilities.dayDifference(
             theoreticalProblems[index]["lastOpened"], time.time()
         ):
@@ -240,9 +240,7 @@ def run():
         elif message.content.startswith("!Help") and placeHolder["mode"] == "normal":
             # list some exercises
             await message.channel.send(spacedRepetitionFileHandler.getHelp())
-        elif (
-            message.content.startswith("!ListAll") and placeHolder["mode"] == "normal"
-        ):
+        elif message.content.startswith("!ListAll") and placeHolder["mode"] == "normal":
             # Send all exercises
             for line in spacedRepetitionFileHandler.listProblems():
                 await message.channel.send(line)
