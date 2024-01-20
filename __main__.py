@@ -126,36 +126,35 @@ def theoretical(answer, userName):
     return "Input a valid answer 'y' or 'n'"
 
 
-def numeric(answer):
+def numeric(answer,userName):
     print("Numeric:answer" + answer)
-    # verifies if the user inputed a valid answer
     if not spacedRepetitionUtilities.integerStringCheck(answer):
         print("Numeric: invalid non numeric input")
         return "Add a numeric answer"
     number = float(answer)
-    # get dependencies
-    global placeHolder
-    problems = spacedRepetitionFileHandler.getNumericProblems()
-    # Apply exercise
+    state=spacedRepetitionFileHandler.getUserState(userName)
+    problems = spacedRepetitionFileHandler.getProblems(userName)
     print("Numeric:" + str(problems))
-    index = placeHolder["index"]
+    index = state["index"]
     problems[index]["lastOpened"] = int(time.time())
     if spacedRepetitionUtilities.compareValues(
-        placeHolder["problem"]["answer"],
+        state["problem"]["answer"],
         number,
-        placeHolder["problem"]["significantFigures"],
+        state["problem"]["significantFigures"],
     ):
-        problems[index]["box"] += 1
+        problems['numeric'][index]["box"] += 1
         print("Numeric:" + str(problems))
-        spacedRepetitionFileHandler.saveNumericProblems(problems)
-        placeHolder = {"mode": "normal"}
+        spacedRepetitionFileHandler.saveProblems(problems,userName)
+        state = {"mode": "normal"}
+        spacedRepetitionFileHandler.setUserState(state,userName)
         return "Congratulations, you got it right!!!"
-    problems[index]["box"] = safelyDecreaseBox(problems[index]["box"])
-    problems[index]["errors"] += 1
+    problems['numeric'][index]["box"] = safelyDecreaseBox(problems[''][index]["box"])
+    problems[numeric][index]["errors"] += 1
     uncertainty = spacedRepetitionUtilities.percentualDeviation(
-        problems[index]["answer"], number
+        problems['numeric'][index]["answer"], number
     )
-    placeHolder = {"mode": "normal"}
+    state = {"mode": "normal"}
+    spacedRepetitionFileHandler.setUserState(state,userName)
     return (
         "Unfortunately you missed by "
         + uncertainty
@@ -165,23 +164,24 @@ def numeric(answer):
     )
 
 
-def numericAddition(answer):
+def numericAddition(answer,userName):
     print("Numeric addition:" + answer)
     # Check if the answer is a number
     if not spacedRepetitionUtilities.floatStringCheck(answer):
         print("Numeric Addition:Non numeric answer")
         return "Add a valid numeric answer."
     # Get dependencies
-    global placeHolder
-    problems = spacedRepetitionFileHandler.getNumericProblems()
+    state=spacedRepetitionFileHandler.getUserState(userName)
+    problems = spacedRepetitionFileHandler.getProblems(userName)
     # Save exercise
-    question = placeHolder["problem"]["question"]
+    question = state["problem"]["question"]
     answerFinal = float(answer)
     significantFigures = spacedRepetitionUtilities.stringSignificantFigures(answer)
     spacedRepetitionFileHandler.addNumericProblem(
-        question, answerFinal, significantFigures, problems
+        question, answerFinal, significantFigures, problems,userName
     )
-    placeHolder = {"mode": "normal"}
+    state = {"mode": "normal"}
+    spacedRepetitionFileHandler.setUserState(state,userName)
     print("Numeric addition:problem added")
     return "Problem (" + question + ") Added"
 
