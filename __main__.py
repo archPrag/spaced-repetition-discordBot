@@ -8,26 +8,22 @@ import spacedRepetitionFileHandler
 import spacedRepetitionUtilities
 
 # variáveis globais
-placeHolder = {"mode": "normal"}
 # consiga o enunciado e exercício atual da repetição espaçada
 
 
-def findQuestionsInGreaterBoxes(lesserBox):
-    # import global variables
+def findQuestionsInGreaterBoxes(lesserBox, userName):
     global placeHolder
     numeberOfWaitingDays = [1, 2, 4, 7]
-    colorCode = ["\001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
-    boldColorCode = ["\001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
+    colorCode = ["\u001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
+    boldColorCode = ["\u001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
     writtenNumbers = ["zero", "one", "two", "three"]
-    numericProblems = spacedRepetitionFileHandler.getNumericProblems()
-    theoreticalProblems = spacedRepetitionFileHandler.getTheoreticalProblems()
-    print("Get question:" + str(numericProblems) + str(theoreticalProblems))
-    # if lesser box is greater than four return(this is a recursion code)
+    problems = spacedRepetitionFileHandler.getProblems("userName")
+    print("Get question:" + str(problems))
     if lesserBox >= 4:
         print("Get questions: Box 4 reached")
         return "End of spaced repetition."
-    # Try to find a problem from lesserBox
     print("Get exercises:box" + str(lesserBox))
+    numericProblems=problems['numeric']
     for index in range(len(numericProblems)):
         print("Get questions: exercise" + str(index))
         if numericProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
@@ -50,7 +46,7 @@ def findQuestionsInGreaterBoxes(lesserBox):
                 + numericProblems[index]["question"]
                 + ".\u001b[0m\n```"
             )
-    # Now try finding from theoretical lesser box
+    theoreticalProblems = problems['theoretical']
     for index in range(len(theoreticalProblems)):
         print("get questions: exercise" + str(index))
         if theoreticalProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
@@ -75,7 +71,7 @@ def findQuestionsInGreaterBoxes(lesserBox):
                 + ".\u001b[0m\n```"
             )
     # Now try in the next box:
-    return findQuestionsInGreaterBoxes(lesserBox + 1)
+    return findQuestionsInGreaterBoxes(lesserBox + 1,userName)
 
 
 def theoreticalWaiting():
@@ -97,7 +93,7 @@ def safelyDecreaseBox(initialBox):
 def theoretical(answer):
     # get dependencies
     global placeHolder
-    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
+    problems = spacedRepetitionFileHandler.getProblems()
     # Apply exercise
     print("theoretical: Did User get it right?" + answer)
     index = placeHolder["index"]
@@ -229,8 +225,8 @@ def run():
     async def on_message(message):  # receba uma mensagem do discord
         # Import global variables
         global placeHolder
-        
-        userName=message.author
+
+        userName = message.author
         if userName == client.user:
             return
         elif message.content.startswith("!Can"):
