@@ -1,4 +1,5 @@
 # coding: utf-8
+import json
 import os
 import time
 
@@ -10,171 +11,21 @@ def directories():
     except:
         print("initialyzer:.spacedRepetition already there")
 
-    try:
-        os.mkdir(".spacedRepetition/data")
-    except:
-        print("initialyzer:.spacedRepetition/data already there")
+
+def getProblems(userName):
+    with open(".spacedRepetition/" + userName + ".json", "r", encoding="utf-8") as file:
+        problems = file.read()
+    json.loads(problems)
 
 
-def initialiseFiles():
-    directories()
-    # Ensures the existence of data files
-    numericQuestionFile = open(
-        ".spacedRepetition/data/numericQuestions", "a", encoding="utf-8"
-    )
-    numericDataFile = open(".spacedRepetition/data/numericData", "a", encoding="utf-8")
-    numericQuestionFile.close()
-    numericDataFile.close()
-    theoreticalQuestionFile = open(
-        ".spacedRepetition/data/theoreticalQuestions", "a", encoding="utf-8"
-    )
-    theoreticalDataFile = open(
-        ".spacedRepetition/data/theoreticalData", "a", encoding="utf-8"
-    )
-    theoreticalAnswerFile = open(
-        ".spacedRepetition/data/theoreticalAnswers", "a", encoding="utf-8"
-    )
-    theoreticalQuestionFile.close()
-    theoreticalAnswerFile.close()
-    theoreticalDataFile.close()
+def saveProblems(problems, userName):
+    jsonString = json.dump(problems, indent=4)
+    with open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8") as file:
+        file.write(jsonString)
 
 
-def getNumericProblems():
-    # Get the questions
-    numericQuestionFile = open(
-        ".spacedRepetition/data/numericQuestions", "r", encoding="utf-8"
-    )
-    questions = numericQuestionFile.read()
-    questions = questions.split("\n")
-    numericQuestionFile.close()
-    # Get the Data
-    numericDataFile = open(".spacedRepetition/data/numericData", "r", encoding="utf-8")
-    data = numericDataFile.read()
-    data = data.split("\n")
-    for index in range(len(data)):
-        data[index] = data[index].split(" ")
-    print(data)
-    numericDataFile.close()
-    # Merge everything
-    numericProblems = []
-    try:  # for dealing with the empty array problem
-        for index in range(len(questions)):
-            numericProblems.append(
-                {
-                    "question": questions[index],
-                    "box": int(data[index][0]),
-                    "answer": float(data[index][1]),
-                    "significantFigures": int(data[index][2]),
-                    "lastOpened": float(data[index][3]),
-                    "errors": int(data[index][4]),
-                }
-            )
-        return numericProblems
-    except:
-        print("Files: Empty numeric files")
-        return []
-
-
-def getTheoreticalProblems():
-    # Get Questions
-    theoreticalQuestionFile = open(
-        ".spacedRepetition/data/theoreticalQuestions", "r", encoding="utf-8"
-    )
-    questions = theoreticalQuestionFile.read()
-    questions = questions.split("\n")
-    theoreticalQuestionFile.close()
-    # Get Answers
-    theoreticalAnswerFile = open(
-        ".spacedRepetition/data/theoreticalAnswers", "r", encoding="utf-8"
-    )
-    answers = theoreticalAnswerFile.read()
-    answers = answers.split("\n")
-    theoreticalAnswerFile.close()
-    theoreticalDataFile = open(
-        ".spacedRepetition/data/theoreticalData", "r", encoding="utf-8"
-    )
-    data = theoreticalDataFile.read()
-    data = data.split("\n")
-    for index in range(len(data)):
-        data[index] = data[index].split(" ")
-    theoreticalDataFile.close()
-    # merge into a dictionary
-    theoreticalProblems = []
-    try:
-        for index in range(len(questions)):
-            theoreticalProblems.append(
-                {
-                    "question": questions[index],
-                    "box": int(data[index][0]),
-                    "answer": answers[index],
-                    "lastOpened": float(data[index][1]),
-                    "errors": int(data[index][2]),
-                }
-            )
-        return theoreticalProblems
-    except:
-        print("Files: Empty numeric files")
-        return []
-
-
-def saveNumericProblems(problems):
-    numericQuestionFile = open(
-        ".spacedRepetition/data/numericQuestions", "w", encoding="utf-8"
-    )
-    numericDataFile = open(".spacedRepetition/data/numericData", "w", encoding="utf-8")
-    # writes every information in its respective file
-    for index in range(len(problems)):
-        problem = problems[index]
-        numericQuestionFile.write(problem["question"])
-        numericDataFile.write(
-            str(problem["box"])
-            + " "
-            + str(problem["answer"])
-            + " "
-            + str(problem["significantFigures"])
-            + " "
-            + str(problem["lastOpened"])
-            + " "
-            + str(problem["errors"])
-        )
-        if index + 1 < len(problems):
-            numericQuestionFile.write("\n")
-            numericQuestionFile.write("\n")
-    numericQuestionFile.close()
-    numericDataFile.close()
-
-
-def saveTheoreticalProblems(problems):
-    theoreticalQuestionFile = open(
-        ".spacedRepetition/data/theoreticalQuestions", "w", encoding="utf-8"
-    )
-    theoreticalDataFile = open(
-        ".spacedRepetition/data/theoreticalData", "w", encoding="utf-8"
-    )
-    theoreticalAnswerFile = open(
-        ".spacedRepetition/data/theoreticalAnswers", "w", encoding="utf-8"
-    )
-    for index in range(len(problems)):
-        theoreticalQuestionFile.write(problems[index]["question"])
-        theoreticalDataFile.write(
-            str(problems[index]["box"])
-            + " "
-            + str(problems[index]["lastOpened"])
-            + " "
-            + str(problems[index]["errors"])
-        )
-        theoreticalAnswerFile.write(problems[index]["answer"])
-        if index + 1 < len(problems):
-            theoreticalQuestionFile.write("\n")
-            theoreticalDataFile.write("\n")
-            theoreticalAnswerFile.write("\n")
-    theoreticalAnswerFile.close()
-    theoreticalQuestionFile.close()
-    theoreticalDataFile.close()
-
-
-def addNumericProblem(question, answer, significantFigure, problems):
-    problems.append(
+def addNumericProblem(question, answer, significantFigure, problems, userName):
+    problems["numeric"].append(
         {
             "question": question,
             "box": 0,
@@ -184,17 +35,16 @@ def addNumericProblem(question, answer, significantFigure, problems):
             "errors": 0,
         }
     )
-    saveNumericProblems(problems)
+    saveProblems(problems, userName)
 
 
-def deleteNumericProblem(index, problems):
-    problems.pop(index)
-    saveNumericProblems(problems)
-    return problems
+def deleteNumericProblem(index, problems, userName):
+    problems["numeric"].pop(index)
+    saveProblems(problems, userName)
 
 
-def addTheoreticalcProblem(question, answer, problems):
-    problems.append(
+def addTheoreticalProblem(question, answer, problems, userName):
+    problems["theoretical"].append(
         {
             "question": question,
             "box": 0,
@@ -203,22 +53,30 @@ def addTheoreticalcProblem(question, answer, problems):
             "errors": 0,
         }
     )
-    saveTheoreticalProblems(problems)
+    saveProblems(problems, userName)
 
 
-def deleteTheoreticalExercise(index, exerciciosAtuais):
-    exerciciosAtuais.pop(index)
-    saveTheoreticalProblems(exerciciosAtuais)
-    return exerciciosAtuais
+def deleteTheoreticalExercise(index, problems, userName):
+    problems["theoretical"].pop(index)
+    saveProblems(exerciciosAtuais, userName)
 
 
-def listProblems():
-    numericProblems = getNumericProblems()
-    theoreticalProblems = getTheoreticalProblems()
-    listProblems = ["Numeric problems:"]
-    for index in range(len(numericProblems)):
-        problem = numericProblems[index]
-        listProblems.append(
+def listProblems(userName):
+    problems=getProblems(userName)
+    listOfProblems = ["Numeric problems:"]
+    for index in range(len(problems['numeric'])):
+        problem = problems['numeric'][index]
+        listOfProblems.append(
+            + problem["question"]
+            + "-box:"
+            + str(problem["box"])
+            + "-errors:"
+            + str(problem["errors"])
+        )
+    listOfProblems.append("Theoretical problems:")
+    for index in range(len(problems['theoretical'])):
+        problem = problems['theoretical'][index]
+        listOfProblems.append(
             str(index)
             + "-"
             + problem["question"]
@@ -227,19 +85,7 @@ def listProblems():
             + "-errors:"
             + str(problem["errors"])
         )
-    listProblems.append("Theoretical problems:")
-    for index in range(len(theoreticalProblems)):
-        exercise = theoreticalProblems[index]
-        listProblems.append(
-            str(index)
-            + "-"
-            + exercise["question"]
-            + "-box:"
-            + str(exercise["box"])
-            + "-errors:"
-            + str(exercise["errors"])
-        )
-    listProblems.append("All problems have been listed.")
+    listOfProblems.append("All problems have been listed.")
     return listProblems
 
 
@@ -289,4 +135,4 @@ def getHelp():
     return helpText
 
 
-initialiseFiles()
+directories

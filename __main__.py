@@ -229,8 +229,9 @@ def run():
     async def on_message(message):  # receba uma mensagem do discord
         # Import global variables
         global placeHolder
-        # Verify if it's not the bot's message
-        if message.author == client.user:
+        
+        userName=message.author
+        if userName == client.user:
             return
         elif message.content.startswith("!Can"):
             # Reestart bots cache
@@ -292,6 +293,7 @@ def run():
             await message.channel.send(numericDeletion(message.content[4:]))
         elif placeHolder["mode"] == "normal" and message.content.startswith("!TD "):
             await message.channel.send(theoreticalDeletion(message.content[4:]))
+        print(userName)
 
     client.run(settings.DISCORD_API_SECRET)
 
