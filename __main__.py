@@ -94,7 +94,7 @@ def safelyDecreaseBox(initialBox):
     return initialBox - 1 + int(initialBox == 0)
 
 
-def theoretical(answer: str):
+def theoretical(answer):
     # get dependencies
     global placeHolder
     problems = spacedRepetitionFileHandler.getTheoreticalProblems()
@@ -120,7 +120,7 @@ def theoretical(answer: str):
     return "Input a valid answer 'y' or 'n'"
 
 
-def numeric(answer: str):
+def numeric(answer):
     print("Numeric:answer" + answer)
     # verifies if the user inputed a valid answer
     if not spacedRepetitionUtilities.integerStringCheck(answer):
@@ -159,7 +159,7 @@ def numeric(answer: str):
     )
 
 
-def numericAddition(answer: str):
+def numericAddition(answer):
     print("Numeric addition:" + answer)
     # Check if the answer is a number
     if not spacedRepetitionUtilities.floatStringCheck(answer):
@@ -180,7 +180,7 @@ def numericAddition(answer: str):
     return "Problem (" + question + ") Added"
 
 
-def theoreticalAddition(answer: str):
+def theoreticalAddition(answer):
     print("Theoretical addition:" + answer)
     # import the dependencies
     global placeHolder

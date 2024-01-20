@@ -146,13 +146,13 @@ def saveNumericProblems(problems):
 
 def saveTheoreticalProblems(problems):
     theoreticalQuestionFile = open(
-        ".spacedRepetition/data/theoreticalQuestion", "w", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalQuestions", "w", encoding="utf-8"
     )
     theoreticalDataFile = open(
         ".spacedRepetition/data/theoreticalData", "w", encoding="utf-8"
     )
     theoreticalAnswerFile = open(
-        ".spacedRepetition/data/theoreticalAnswer", "w", encoding="utf-8"
+        ".spacedRepetition/data/theoreticalAnswers", "w", encoding="utf-8"
     )
     for index in range(len(problems)):
         theoreticalQuestionFile.write(problems[index]["question"])
