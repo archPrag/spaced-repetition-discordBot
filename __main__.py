@@ -12,7 +12,6 @@ import spacedRepetitionUtilities
 
 
 def findQuestionsInGreaterBoxes(lesserBox, userName):
-    global placeHolder
     numeberOfWaitingDays = [1, 2, 4, 7]
     colorCode = ["\u001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
     boldColorCode = ["\u001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
@@ -23,7 +22,7 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
         print("Get questions: Box 4 reached")
         return "End of spaced repetition."
     print("Get exercises:box" + str(lesserBox))
-    numericProblems=problems['numeric']
+    numericProblems = problems["numeric"]
     for index in range(len(numericProblems)):
         print("Get questions: exercise" + str(index))
         if numericProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
@@ -32,11 +31,14 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
             numericProblems[index]["lastOpened"], time.time()
         ):
             print("Get questions: chosen exercise " + str(numericProblems[index]))
-            placeHolder = {
-                "problem": numericProblems[index],
-                "index": index,
-                "mode": "numeric",
-            }
+            spacedRepetitionFileHandler.setUserState(
+                {
+                    "problem": numericProblems[index],
+                    "index": index,
+                    "mode": "numeric",
+                },
+                userName,
+            )
             return (
                 "```ansi\n "
                 + colorCode[lesserBox]
@@ -46,7 +48,7 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
                 + numericProblems[index]["question"]
                 + ".\u001b[0m\n```"
             )
-    theoreticalProblems = problems['theoretical']
+    theoreticalProblems = problems["theoretical"]
     for index in range(len(theoreticalProblems)):
         print("get questions: exercise" + str(index))
         if theoreticalProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
@@ -54,11 +56,14 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
         ] <= spacedRepetitionUtilities.dayDifference(
             theoreticalProblems[index]["lastOpened"], time.time()
         ):
-            placeHolder = {
-                "problem": theoreticalProblems[index],
-                "index": index,
-                "mode": "theoreticalWaiting",
-            }
+            spacedRepetitionFileHandler.setUserState(
+                {
+                    "problem": theoreticalProblems[index],
+                    "index": index,
+                    "mode": "theoreticalWaiting",
+                },
+                userName,
+            )
             print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
             return (
                 "```ansi\n "
@@ -71,17 +76,18 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
                 + ".\u001b[0m\n```"
             )
     # Now try in the next box:
-    return findQuestionsInGreaterBoxes(lesserBox + 1,userName)
+    return findQuestionsInGreaterBoxes(lesserBox + 1, userName)
 
 
-def theoreticalWaiting():
+def theoreticalWaiting(userName):
     # Get dependencies
-    global placeHolder
+    state = spacedRepetitionFileHandler.getProblems(userName)
     print("Theoretical waiting: the waiting is over.")
-    placeHolder["mode"] = "theoretical"
+    state["mode"] = "theoretical"
+    spacedRepetitionFileHandler.setUserState(state, userName)
     return (
         "The answer was: \n"
-        + placeHolder["problem"]["answer"]
+        + state["problem"]["answer"]
         + "\n Did you get it right?(y,n)"
     )
 
@@ -90,27 +96,31 @@ def safelyDecreaseBox(initialBox):
     return initialBox - 1 + int(initialBox == 0)
 
 
-def theoretical(answer):
+def theoretical(answer, userName):
     # get dependencies
-    global placeHolder
-    problems = spacedRepetitionFileHandler.getProblems()
+    state = spacedRepetitionFileHandler.getUserState(userName)
+    problems = spacedRepetitionFileHandler.getProblems(userName)
     # Apply exercise
     print("theoretical: Did User get it right?" + answer)
-    index = placeHolder["index"]
+    index = state["index"]
     problems[index]["lastOpened"] = int(time.time())
     answer = answer.lower()
     if answer.startswith("y"):
-        problems[index]["box"] += 1
+        problems["theoretical"][index]["box"] += 1
         print("theoretical:" + str(problems))
-        spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
-        placeHolder = {"mode": "normal"}
+        spacedRepetitionFileHandler.saveProblems(problems, userName)
+        state = {"mode": "normal"}
+        spacedRepetitionFileHandler.setUserState(state, userName)
         return "Congratulations, you got it right!!!"
     elif answer.startswith("n"):
-        problems[index]["box"] = safelyDecreaseBox(problems[index]["box"])
-        problems[index]["errors"] += 1
+        problems["theoretical"][index]["box"] = safelyDecreaseBox(
+            problems["theoretical"][index]["box"]
+        )
+        problems["theoretical"][index]["errors"] += 1
         print("theoretical:" + str(problems))
-        spacedRepetitionFileHandler.saveTheoreticalProblems(problems)
-        placeHolder = {"mode": "normal"}
+        spacedRepetitionFileHandler.saveProblems(problems, userName)
+        state = {"mode": "normal"}
+        spacedRepetitionFileHandler.setUserState(state, userName)
         return "Unfortunately you got it wrong. Better luck next time!"
     # make the user put a valid input
     return "Input a valid answer 'y' or 'n'"
