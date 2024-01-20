@@ -8,31 +8,6 @@ import settings
 # variáveis globais
 # consiga o enunciado e exercício atual da repetição espaçada
 
-
-
-
-
-def numericDeletion(answer,userName):
-    print("Numeric Deletion:" + answer)
-    if not spacedRepetitionUtilities.integerStringCheck(answer):
-        print("Numeric deletion: the answer is not integer")
-        return "Not a valid index."
-    problems = spacedRepetitionFileHandler.getProblems()
-    spacedRepetitionFileHandler.deleteNumericProblem(int(answer), problems,userName)
-    return "Exercise deleted."
-
-
-def theoreticalDeletion(answer: str):
-    print("Theoretical Deletion" + answer)
-    if not spacedRepetitionUtilities.integerStringCheck(answer):
-        print("Theoretical Deletion: the index is not an integer")
-        return "Not a valid index."
-    # Delete o exercício de índice da resposta
-    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
-    spacedRepetitionFileHandler.deleteTheoreticalExercise(int(answer), problems)
-    return "Exercise deleted."
-
-
 def run():
     intents = discord.Intents.default()
     intents.message_content = True
