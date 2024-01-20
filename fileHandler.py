@@ -173,6 +173,15 @@ def addUser(userName):
         ".spacedRepetition/adminData/userStates.json", "w", encoding="utf-8"
     ) as file:
         file.write(jsonString)
+def userExists(userName):
+    with open(
+        ".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8"
+    ) as file:
+        states = json.load(file.read())
+    if userName in states.keys():
+        return True
+    return False
+    
     
 
 
