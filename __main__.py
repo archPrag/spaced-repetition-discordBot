@@ -186,26 +186,27 @@ def numericAddition(answer,userName):
     return "Problem (" + question + ") Added"
 
 
-def theoreticalAddition(answer):
+def theoreticalAddition(answer,userName):
     print("Theoretical addition:" + answer)
     # import the dependencies
-    global placeHolder
-    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
+    state=spacedRepetitionFileHandler.getUserState(userName)
+    problems = spacedRepetitionFileHandler.getProblems(userName)
     # save the exercise
-    question = placeHolder["problem"]["question"]
-    spacedRepetitionFileHandler.addTheoreticalcProblem(question, answer, problems)
-    placeHolder = {"mode": "normal"}
+    question = state["problem"]["question"]
+    spacedRepetitionFileHandler.addTheoreticalProblem(question, answer, problems,userName)
+    state = {"mode": "normal"}
+    spacedRepetitionFileHandler.setUserState(state,userName)
     print("Theoretical Addition : problem added")
     return "Problem (" + question + ") added."
 
 
-def numericDeletion(answer: str):
+def numericDeletion(answer,userName):
     print("Numeric Deletion:" + answer)
     if not spacedRepetitionUtilities.integerStringCheck(answer):
         print("Numeric deletion: the answer is not integer")
         return "Not a valid index."
-    problems = spacedRepetitionFileHandler.getTheoreticalProblems()
-    spacedRepetitionFileHandler.deleteNumericProblem(int(answer), problems)
+    problems = spacedRepetitionFileHandler.getProblems()
+    spacedRepetitionFileHandler.deleteNumericProblem(int(answer), problems,userName)
     return "Exercise deleted."
 
 
