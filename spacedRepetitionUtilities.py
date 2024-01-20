@@ -1,4 +1,5 @@
 # coding: utf-8
+import numpy as np
 
 def integerStringCheck(numericString:str):
     try:
@@ -21,9 +22,9 @@ def compareValues(correct,dubious,significantFigures):
     if correct==0:
         return abs(dubious)<=10*0.1**significantFigures
     elif abs(correct)>=10:
-        return compareValue(correct/10,dubious/10,significantFigures)
+        return compareValues(correct/10,dubious/10,significantFigures)
     elif abs(correct)<1:
-        return compareValue(correct*10,dubious*10,significantFigures)
+        return compareValues(correct*10,dubious*10,significantFigures)
     else:
         return abs(correct-dubious)<=10*0.1**significantFigures
 def stringSignificantFigures(numericString:str):
