@@ -1,14 +1,15 @@
+import time
 
 import fileHandler
 import utilities
-import time
+
 
 def findQuestionsInGreaterBoxes(lesserBox, userName):
     numeberOfWaitingDays = [1, 2, 4, 7]
     colorCode = ["\u001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
     boldColorCode = ["\u001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
     writtenNumbers = ["zero", "one", "two", "three"]
-    problems = fileHandler.getProblems("userName")
+    problems = fileHandler.getProblems(userName)
     print("Get question:" + str(problems))
     if lesserBox >= 4:
         print("Get questions: Box 4 reached")
@@ -19,9 +20,7 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
         print("Get questions: exercise" + str(index))
         if numericProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
             lesserBox
-        ] <= utilities.dayDifference(
-            numericProblems[index]["lastOpened"], time.time()
-        ):
+        ] <= utilities.dayDifference(numericProblems[index]["lastOpened"], time.time()):
             print("Get questions: chosen exercise " + str(numericProblems[index]))
             fileHandler.setUserState(
                 {
@@ -73,7 +72,7 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
 
 def theoreticalWaiting(userName):
     # Get dependencies
-    state = fileHandler.getProblems(userName)
+    state = fileHandler.getUserState(userName)
     print("Theoretical waiting: the waiting is over.")
     state["mode"] = "theoretical"
     fileHandler.setUserState(state, userName)
@@ -95,7 +94,7 @@ def theoretical(answer, userName):
     # Apply exercise
     print("theoretical: Did User get it right?" + answer)
     index = state["index"]
-    problems[index]["lastOpened"] = int(time.time())
+    problems["theoretical"][index]["lastOpened"] = int(time.time())
     answer = answer.lower()
     if answer.startswith("y"):
         problems["theoretical"][index]["box"] += 1
@@ -118,35 +117,35 @@ def theoretical(answer, userName):
     return "Input a valid answer 'y' or 'n'"
 
 
-def numeric(answer,userName):
+def numeric(answer, userName):
     print("Numeric:answer" + answer)
     if not utilities.integerStringCheck(answer):
         print("Numeric: invalid non numeric input")
         return "Add a numeric answer"
     number = float(answer)
-    state=fileHandler.getUserState(userName)
+    state = fileHandler.getUserState(userName)
     problems = fileHandler.getProblems(userName)
     print("Numeric:" + str(problems))
     index = state["index"]
-    problems[index]["lastOpened"] = int(time.time())
+    problems["numeric"][index]["lastOpened"] = int(time.time())
     if utilities.compareValues(
         state["problem"]["answer"],
         number,
         state["problem"]["significantFigures"],
     ):
-        problems['numeric'][index]["box"] += 1
+        problems["numeric"][index]["box"] += 1
         print("Numeric:" + str(problems))
-        fileHandler.saveProblems(problems,userName)
+        fileHandler.saveProblems(problems, userName)
         state = {"mode": "normal"}
-        fileHandler.setUserState(state,userName)
+        fileHandler.setUserState(state, userName)
         return "Congratulations, you got it right!!!"
-    problems['numeric'][index]["box"] = safelyDecreaseBox(problems[''][index]["box"])
+    problems["numeric"][index]["box"] = safelyDecreaseBox(problems[""][index]["box"])
     problems[numeric][index]["errors"] += 1
     uncertainty = utilities.percentualDeviation(
-        problems['numeric'][index]["answer"], number
+        problems["numeric"][index]["answer"], number
     )
     state = {"mode": "normal"}
-    fileHandler.setUserState(state,userName)
+    fileHandler.setUserState(state, userName)
     return (
         "Unfortunately you missed by "
         + uncertainty
@@ -154,4 +153,3 @@ def numeric(answer,userName):
         + str(number)
         + ". Better luck next time!"
     )
-

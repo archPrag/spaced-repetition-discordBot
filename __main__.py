@@ -6,7 +6,6 @@ import discord
 import settings
 
 import fileHandler
-
 import problemHandler
 
 import addition
@@ -26,9 +25,9 @@ def run():
 
     @client.event
     async def on_message(message):  # receba uma mensagem do discord
-        userName = message.author
+        userName = str(message.author)[1:]
 
-        if userName == client.user:
+        if message.author == client.user:
             return
         elif not fileHandler.userExists(userName):
             fileHandler.addUser(userName)
@@ -38,6 +37,8 @@ def run():
         if message.content.startswith("!Can"):
             # Reestart bots cache
             print("Canceled")
+            state={'mode':'normal'}
+            fileHandler.setUserState(state,userName)
             await message.channel.send("```ansi\n\u001b[0;31mCancelar\u001b[0m\n```")
         elif message.content.startswith("!Help") and state["mode"] == "normal":
             await message.channel.send(fileHandler.getHelp())
