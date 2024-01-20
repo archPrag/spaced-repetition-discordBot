@@ -5,8 +5,13 @@ import discord
 
 import settings
 
-# variáveis globais
-# consiga o enunciado e exercício atual da repetição espaçada
+import fileHandler
+
+import problemHandler
+
+import addition
+
+import delletion
 
 def run():
     intents = discord.Intents.default()
@@ -21,42 +26,42 @@ def run():
 
     @client.event
     async def on_message(message):  # receba uma mensagem do discord
-        # Import global variables
-        global placeHolder
-
         userName = message.author
+
         if userName == client.user:
             return
-        elif message.content.startswith("!Can"):
+        elif not fileHandler.userExists(userName):
+            fileHandler.addUser(userName)
+
+        state=fileHandler.getUserState(userName)
+            
+        if message.content.startswith("!Can"):
             # Reestart bots cache
-            placeHolder = {"mode": "normal"}
             print("Canceled")
             await message.channel.send("```ansi\n\u001b[0;31mCancelar\u001b[0m\n```")
-        elif message.content.startswith("!Help") and placeHolder["mode"] == "normal":
-            # list some exercises
-            await message.channel.send(spacedRepetitionFileHandler.getHelp())
-        elif message.content.startswith("!ListAll") and placeHolder["mode"] == "normal":
-            # Send all exercises
-            for line in spacedRepetitionFileHandler.listProblems():
+        elif message.content.startswith("!Help") and state["mode"] == "normal":
+            await message.channel.send(fileHandler.getHelp())
+        elif message.content.startswith("!ListAll") and state["mode"] == "normal":
+            for line in fileHandler.listProblems(userName):
                 await message.channel.send(line)
-        elif message.content.startswith("!List") and placeHolder["mode"] == "normal":
+        elif message.content.startswith("!List") and state["mode"] == "normal":
             # liste os exercícios incompletos
-            for line in spacedRepetitionFileHandler.listUnfinishedProblems():
+            for line in fileHandler.listUnfinishedProblems(userName):
                 await message.channel.send(line)
         elif (
-            message.content.startswith("!Exercise") and placeHolder["mode"] == "normal"
+            message.content.startswith("!Exercise") and state["mode"] == "normal"
         ):
-            await message.channel.send(findQuestionsInGreaterBoxes(0))
-        elif placeHolder["mode"] == "numeric":
-            await message.channel.send(numeric(message.content))
-            await message.channel.send(findQuestionsInGreaterBoxes(0))
-        elif placeHolder["mode"] == "theoreticalWaiting":
-            await message.channel.send(theoreticalWaiting())
-        elif placeHolder["mode"] == "theoretical":
-            await message.channel.send(theoretical(message.content))
-            await message.channel.send(findQuestionsInGreaterBoxes(0))
-        elif message.content.startswith("!NA ") and placeHolder["mode"] == "normal":
-            placeHolder = {
+            await message.channel.send(problemHandler.findQuestionsInGreaterBoxes(0,userName))
+        elif state["mode"] == "numeric":
+            await message.channel.send(problemHandler.numeric(message.content,userName))
+            await message.channel.send(problemHandler.findQuestionsInGreaterBoxes(0,userName))
+        elif state["mode"] == "theoreticalWaiting":
+            await message.channel.send(problemHandler.theoreticalWaiting(userName))
+        elif state["mode"] == "theoretical":
+            await message.channel.send(problemHandler.theoretical(message.content,userName))
+            await message.channel.send(problemHandler.findQuestionsInGreaterBoxes(0,userName))
+        elif message.content.startswith("!NA ") and state["mode"] == "normal":
+            state = {
                 "mode": "numericAddition",
                 "problem": {
                     "question": message.content[4:],
@@ -66,11 +71,12 @@ def run():
                     "error": 0,
                 },
             }
+            fileHandler.setUserState(state,userName)
             await message.channel.send("What is the numeric answer?")
-        elif placeHolder["mode"] == "numericAddition":
-            await message.channel.send(numericAddition(message.content))
-        elif message.content.startswith("!TA ") and placeHolder["mode"] == "normal":
-            placeHolder = {
+        elif state["mode"] == "numericAddition":
+            await message.channel.send(addition.numeric(message.content,userName))
+        elif message.content.startswith("!TA ") and state["mode"] == "normal":
+            state = {
                 "mode": "theoreticalAddition",
                 "problem": {
                     "question": message.content[4:],
@@ -80,13 +86,14 @@ def run():
                     "error": 0,
                 },
             }
+            fileHandler.setUserState(state,userName)
             await message.channel.send("What is the theoretical answer?")
-        elif placeHolder["mode"] == "theoreticalAddition":
-            await message.channel.send(theoreticalAddition(message.content))
-        elif placeHolder["mode"] == "normal" and message.content.startswith("!ND "):
-            await message.channel.send(numericDeletion(message.content[4:]))
-        elif placeHolder["mode"] == "normal" and message.content.startswith("!TD "):
-            await message.channel.send(theoreticalDeletion(message.content[4:]))
+        elif state["mode"] == "theoreticalAddition":
+            await message.channel.send(addition.theoretical(message.content,userName))
+        elif state["mode"] == "normal" and message.content.startswith("!ND "):
+            await message.channel.send(delletion.numeric(message.content[4:],userName))
+        elif state["mode"] == "normal" and message.content.startswith("!TD "):
+            await message.channel.send(delletion.theoretical(message.content[4:],userName))
         print(userName)
 
     client.run(settings.DISCORD_API_SECRET)
