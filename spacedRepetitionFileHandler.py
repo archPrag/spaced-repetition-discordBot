@@ -86,18 +86,17 @@ def listProblems(userName):
             + str(problem["errors"])
         )
     listOfProblems.append("All problems have been listed.")
-    return listProblems
+    return listOfProblems
 
 
-def listUnfinishedProblems():
-    numericProblems = getNumericProblems()
-    theoreticalProblems = getTheoreticalProblems()
-    listProblems = ["Numeric problems:"]
+def listUnfinishedProblems(userName):
+    problems=getProblems(userName)
+    listOfProblems = ["Numeric problems:"]
     counter = 0
-    for index in range(len(numericProblems)):
-        problem = numericProblems[index]
+    for index in range(len(problems['numeric'])):
+        problem = problems['numeric'][index]
         if problem["box"] < 4:
-            listProblems.append(
+            listOfProblems.append(
                 str(index)
                 + "-"
                 + problem["question"]
@@ -107,11 +106,11 @@ def listUnfinishedProblems():
                 + str(problem["errors"])
             )
             counter += 1
-    listProblems.append("Theoretical problems:")
-    for index in range(len(theoreticalProblems)):
-        problem = theoreticalProblems[index]
+    listOfProblems.append("Theoretical problems:")
+    for index in range(len(problems['theoretical'])):
+        problem = problems['theoretical'][index]
         if problem["box"] < 4:
-            listProblems.append(
+            listOfProblems.append(
                 str(index)
                 + "-"
                 + problem["question"]
@@ -121,10 +120,10 @@ def listUnfinishedProblems():
                 + str(problem["errors"])
             )
             counter += 1
-    listProblems.append(
+    listOfProblems.append(
         "All problems have been listed.-" + str(counter) + " unfinished problems."
     )
-    return listProblems
+    return listOfProblems
 
 
 def getHelp():
@@ -135,4 +134,4 @@ def getHelp():
     return helpText
 
 
-directories
+directories()
