@@ -39,7 +39,7 @@ def run():
             print("Canceled")
             state={'mode':'normal'}
             fileHandler.setUserState(state,userName)
-            await message.channel.send("```ansi\n\u001b[0;31mCancelar\u001b[0m\n```")
+            await message.channel.send("```ansi\n\u001b[0;31mCanceled\u001b[0m\n```")
         elif message.content.startswith("!Help") and state["mode"] == "normal":
             await message.channel.send(fileHandler.getHelp())
         elif message.content.startswith("!ListAll") and state["mode"] == "normal":
