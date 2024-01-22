@@ -139,8 +139,10 @@ def numeric(answer, userName):
         state = {"mode": "normal"}
         fileHandler.setUserState(state, userName)
         return "Congratulations, you got it right!!!"
-    problems["numeric"][index]["box"] = safelyDecreaseBox(problems[""][index]["box"])
-    problems[numeric][index]["errors"] += 1
+    problems["numeric"][index]["box"] = safelyDecreaseBox(
+        problems["numeric"][index]["box"]
+    )
+    problems["numeric"][index]["errors"] += 1
     uncertainty = utilities.percentualDeviation(
         problems["numeric"][index]["answer"], number
     )
