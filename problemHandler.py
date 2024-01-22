@@ -119,7 +119,7 @@ def theoretical(answer, userName):
 
 def numeric(answer, userName):
     print("Numeric:answer" + answer)
-    if not utilities.integerStringCheck(answer):
+    if not utilities.floatStringCheck(answer):
         print("Numeric: invalid non numeric input")
         return "Add a numeric answer"
     number = float(answer)
