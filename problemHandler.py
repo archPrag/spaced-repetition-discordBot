@@ -147,11 +147,12 @@ def numeric(answer, userName):
         problems["numeric"][index]["answer"], number
     )
     state = {"mode": "normal"}
+    fileHandler.saveProblems(problems,userName)
     fileHandler.setUserState(state, userName)
     return (
         "Unfortunately you missed by "
         + uncertainty
         + ", the answer was "
-        + str(number)
+        + str(problems['numeric'][index]['answer'])
         + ". Better luck next time!"
     )
