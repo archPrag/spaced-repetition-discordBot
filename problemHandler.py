@@ -59,7 +59,7 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
             return (
                 "```ansi\n "
                 + boldColorCode[lesserBox]
-                + "Theoretical box"
+                + "Theoretical box "
                 + writtenNumbers[lesserBox]
                 + "\n"
                 + theoreticalProblems[index]["question"]
