@@ -3,6 +3,8 @@ import time
 
 import discord
 
+import asyncio
+
 import settings
 
 import fileHandler
@@ -11,7 +13,6 @@ import problemHandler
 import addition
 
 import delletion
-
 def run():
     intents = discord.Intents.default()
     intents.message_content = True

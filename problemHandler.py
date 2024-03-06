@@ -35,7 +35,7 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
                 + colorCode[lesserBox]
                 + "Numeric box "
                 + writtenNumbers[lesserBox]
-                + "\n(numeric problem"+index+")"
+                + "\n(numeric problem "+str(index)+")"
                 + numericProblems[index]["question"]
                 + ".\u001b[0m\n```"
             )
@@ -61,7 +61,7 @@ def findQuestionsInGreaterBoxes(lesserBox, userName):
                 + boldColorCode[lesserBox]
                 + "Theoretical box "
                 + writtenNumbers[lesserBox]
-                + "\n (theoretical problem"+index+")"
+                + "\n (theoretical problem "+str(index)+")"
                 + theoreticalProblems[index]["question"]
                 + "\n(Send any question to continue)"
                 + ".\u001b[0m\n```"
