@@ -18,18 +18,16 @@ def basicFiles():
     file.close()
 
 
-def getProblems(userName):
-    with open(".spacedRepetition/" + userName + ".json", "r", encoding="utf-8") as file:
-        problems = file.read()
-    return json.loads(problems)
 
+def getProblems(userName):
+    file=open(".spacedRepetition/" + userName + ".json", "r", encoding="utf-8")
+    problems = file.read()
+    return json.loads(problems)
 
 def saveProblems(problems, userName):
     jsonString = json.dumps(problems, indent=4)
-    with open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8") as file:
-        file.write(jsonString)
-
-
+    file=open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8")
+    file.write(jsonString)
 def addNumericProblem(question, answer, significantFigure, problems, userName):
     problems["numeric"].append(
         {
@@ -140,27 +138,18 @@ def getHelp():
 
 
 def getUserState(userName):
-    with open(
-        ".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8"
-    ) as file:
-        states = json.loads(file.read())
+    file=open(".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8")
+    states = json.loads(file.read())
     return states[userName]
 
 
 def setUserState(state, userName):
-    with open(
-        ".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8"
-    ) as file:
-        states = json.loads(file.read())
-
+    file=open( ".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8")
+    states = json.loads(file.read())
     states[userName] = state
     jsonString = json.dumps(states, indent=4)
-    with open(
-        ".spacedRepetition/adminData/userStates.json", "w", encoding="utf-8"
-    ) as file:
-        file.write(jsonString)
-
-
+    file=open( ".spacedRepetition/adminData/userStates.json", "w", encoding="utf-8")
+    file.write(jsonString)
 def addUser(userName):
     file = open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8")
     jsonString=json.dumps({'theoretical':[],'numeric':[]})
@@ -176,8 +165,6 @@ def addUser(userName):
         ".spacedRepetition/adminData/userStates.json", "w", encoding="utf-8"
     ) as file:
         file.write(jsonString)
-
-
 def userExists(userName):
     file=open(".spacedRepetition/adminData/userStates.json",encoding='utf-8')
     states = json.load(file)
@@ -187,6 +174,4 @@ def userExists(userName):
             return True
     file.close()
     return False
-
-
 basicFiles()
