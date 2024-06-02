@@ -1,73 +1,94 @@
 import time
-
 import fileHandler
 import utilities
+import materials
+
+numberOfBoxes=4
+basicDivision=[1,2,4,7]
+numericalColorCode = ["\u001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
+theoreticalColorCode = ["\u001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
+boxNames = ["zero", "one", "two", "three"]
 
 
-def findQuestionsInGreaterBoxes(lesserBox, userName):
-    numeberOfWaitingDays = [1, 2, 4, 7]
-    colorCode = ["\u001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
-    boldColorCode = ["\u001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
-    writtenNumbers = ["zero", "one", "two", "three"]
+
+
+def findQuestion(userName):
+    global numberOfBoxes
+    global basicDivision
+    global numericalColorCode
+    global theoreticalColorCode
+    global boxNames
+    numberOfWaitingDays=[]
     problems = fileHandler.getProblems(userName)
-    print("Get question:" + str(problems))
-    if lesserBox >= 4:
-        print("Get questions: Box 4 reached")
-        return "End of spaced repetition."
-    print("Get exercises:box" + str(lesserBox))
+    variables=fileHandler.getUserVars(userName)
+    stringRandom=variables["randomizedString"]
     numericProblems = problems["numeric"]
-    for index in range(len(numericProblems)):
-        print("Get questions: exercise" + str(index))
-        if numericProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
-            lesserBox
-        ] <= utilities.dayDifference(numericProblems[index]["lastOpened"], time.time()):
-            print("Get questions: chosen exercise " + str(numericProblems[index]))
-            fileHandler.setUserState(
-                {
-                    "problem": numericProblems[index],
-                    "index": index,
-                    "mode": "numeric",
-                },
-                userName,
-            )
-            return (
-                "```ansi\n "
-                + colorCode[lesserBox]
-                + "Numeric box "
-                + writtenNumbers[lesserBox]
-                + "\n(numeric problem "+str(index)+")"
-                + numericProblems[index]["question"]
-                + ".\u001b[0m\n```"
-            )
-    theoreticalProblems = problems["theoretical"]
-    for index in range(len(theoreticalProblems)):
-        print("get questions: exercise" + str(index))
-        if theoreticalProblems[index]["box"] == lesserBox and numeberOfWaitingDays[
-            lesserBox
-        ] <= utilities.dayDifference(
-            theoreticalProblems[index]["lastOpened"], time.time()
-        ):
-            fileHandler.setUserState(
-                {
-                    "problem": theoreticalProblems[index],
-                    "index": index,
-                    "mode": "theoreticalWaiting",
-                },
-                userName,
-            )
-            print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
-            return (
-                "```ansi\n "
-                + boldColorCode[lesserBox]
-                + "Theoretical box "
-                + writtenNumbers[lesserBox]
-                + "\n (theoretical problem "+str(index)+")"
-                + theoreticalProblems[index]["question"]
-                + "\n(Send any question to continue)"
-                + ".\u001b[0m\n```"
-            )
+    print("Get question:" + str(problems))
+    if numberOfBoxes<=len(basicDivision):
+        for index in range(numberOfBoxes):
+            numberOfWaitingDays.append(basicDivision[index])
+    if numberOfBoxes>4:
+        numberOfWaitingDays=basicDivision
+        for index in range(len(basicDivision),numberOfBoxes):
+            numberOfWaitingDays.append(basicDivision[-1]*(index-len(basicDivision)+1))
+    for box in range(numberOfBoxes):
+        print("Get exercises:box" + str(box))
+        for index in range(len(numericProblems)):
+            print("Get questions: exercise" + str(index))
+            if numericProblems[index]["box"] == box and numberOfWaitingDays[ box ] <= utilities.dayDifference(numericProblems[index]["lastOpened"], time.time()):
+                print("Get questions: chosen exercise " + str(numericProblems[index]))
+                fileHandler.setUserState(
+                    {
+                        "problem": numericProblems[index],
+                        "index": index,
+                        "mode": "numeric",
+                    },
+                    userName,
+                )
+                return (
+                    "```ansi\n "
+                    + numericalColorCode[box]
+                    + "Numeric box "
+                    + boxNames[box]
+                    + "\n(numeric problem "+str(index)+")"
+                    + numericProblems[index]["question"]
+                    + ".\u001b[0m\n```"
+                )
+        theoreticalProblems = problems["theoretical"]
+        for index in range(len(theoreticalProblems)):
+            print("get questions: exercise" + str(index))
+            if theoreticalProblems[index]["box"] == box and numberOfWaitingDays[
+                box
+            ] <= utilities.dayDifference(
+                theoreticalProblems[index]["lastOpened"], time.time()
+            ):
+                fileHandler.setUserState(
+                    {
+                        "problem": theoreticalProblems[index],
+                        "index": index,
+                        "mode": "theoreticalWaiting",
+                    },
+                    userName,
+                )
+                print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
+                return (
+                    "```ansi\n "
+                    + theoreticalColorCode[box]
+                    + "Theoretical box "
+                    + boxNames[box]
+                    + "\n (theoretical problem "+str(index)+")"
+                    + theoreticalProblems[index]["question"]
+                    + "\n(Send any question to continue)"
+                    + ".\u001b[0m\n```"
+                )
     # Now try in the next box:
-    return findQuestionsInGreaterBoxes(lesserBox + 1, userName)
+    print("Get questions: Box 4 reached")
+    if utilities.dayDifference(variables["lastRandomized"],time.time())>=1:
+        stringRandom=materials.chooseDayMaterials(userName)
+        variables["lastRandomized"]=time.time()
+        variables["randomizedString"]=stringRandom
+        fileHandler.setUserVars(variables,userName)
+    return stringRandom
 
 
 def theoreticalWaiting(userName):

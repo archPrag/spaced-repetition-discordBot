@@ -35,3 +35,26 @@ def theoretical(answer,userName):
     fileHandler.setUserState(state,userName)
     print("Theoretical Addition : problem added")
     return "Problem (" + question + ") added."
+def materialAdd(answer,userName):
+    formated=answer.split("@")
+    chapterNames=[]
+    problemsPerChapter=[]
+    if len(formated)%2==0:
+        return"Add a valid answer name@chapter name@exercise number@chapter name@exercise number@..."
+    for index in range(len(formated)):
+        print(index)
+        if (not utilities.integerStringCheck(formated[index])) and index%2==0 and index!=0:
+            return"Add a valid answer name@chapter name@exercise number@chapter name@exercise number@..."
+        if index%2==1:
+            chapterNames.append(formated[index])
+        if index%2==0 and index!=0:
+            problemsPerChapter.append(int(formated[index]))
+    if len(chapterNames)!=len(problemsPerChapter):
+        print(problemsPerChapter)
+        return"Add a valid answer name@chapter name@exercise number@chapter name@exercise number@..."
+    fileHandler.addMaterial(formated[0],chapterNames,problemsPerChapter,userName)
+    return "material added"
+
+
+
+

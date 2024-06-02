@@ -19,4 +19,8 @@ def theoretical(answer,userName):
     problems = fileHandler.getProblems(userName)
     fileHandler.deleteTheoreticalExercise(int(answer), problems,userName)
     return "Exercise deleted."
-
+def materialDel(answer,userName):
+    if not fileHandler.materialExists(answer,userName):
+        return "Could not find material "+ answer
+    fileHandler.deleteMaterials(answer,userName)
+    return "material Deleted"

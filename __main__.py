@@ -41,28 +41,21 @@ def run():
             state={'mode':'normal'}
             fileHandler.setUserState(state,userName)
             await message.channel.send("```ansi\n\u001b[0;31mCanceled\u001b[0m\n```")
-        elif message.content.startswith("!Help") and state["mode"] == "normal":
+        if message.content.startswith("!Help") and state["mode"] == "normal":
             await message.channel.send(fileHandler.getHelp())
-        elif message.content.startswith("!ListAll") and state["mode"] == "normal":
-            for line in fileHandler.listProblems(userName):
-                await message.channel.send(line)
-        elif message.content.startswith("!List") and state["mode"] == "normal":
-            # liste os exercícios incompletos
-            for line in fileHandler.listUnfinishedProblems(userName):
-                await message.channel.send(line)
-        elif (
+        if (
             message.content.startswith("!Exercise") and state["mode"] == "normal"
         ):
-            await message.channel.send(problemHandler.findQuestionsInGreaterBoxes(0,userName))
-        elif state["mode"] == "numeric":
+            await message.channel.send(problemHandler.findQuestion(userName))
+        if state["mode"] == "numeric":
             await message.channel.send(problemHandler.numeric(message.content,userName))
-            await message.channel.send(problemHandler.findQuestionsInGreaterBoxes(0,userName))
-        elif state["mode"] == "theoreticalWaiting":
+            await message.channel.send(problemHandler.findQuestion(userName))
+        if state["mode"] == "theoreticalWaiting":
             await message.channel.send(problemHandler.theoreticalWaiting(userName))
-        elif state["mode"] == "theoretical":
+        if state["mode"] == "theoretical":
             await message.channel.send(problemHandler.theoretical(message.content,userName))
-            await message.channel.send(problemHandler.findQuestionsInGreaterBoxes(0,userName))
-        elif message.content.startswith("!NA ") and state["mode"] == "normal":
+            await message.channel.send(problemHandler.findQuestion(userName))
+        if message.content.startswith("!NA ") and state["mode"] == "normal":
             state = {
                 "mode": "numericAddition",
                 "problem": {
@@ -75,9 +68,9 @@ def run():
             }
             fileHandler.setUserState(state,userName)
             await message.channel.send("What is the numeric answer?")
-        elif state["mode"] == "numericAddition":
+        if state["mode"] == "numericAddition":
             await message.channel.send(addition.numeric(message.content,userName))
-        elif message.content.startswith("!TA ") and state["mode"] == "normal":
+        if message.content.startswith("!TA ") and state["mode"] == "normal":
             state = {
                 "mode": "theoreticalAddition",
                 "problem": {
@@ -90,12 +83,30 @@ def run():
             }
             fileHandler.setUserState(state,userName)
             await message.channel.send("What is the theoretical answer?")
-        elif state["mode"] == "theoreticalAddition":
+        if message.content.startswith("!MA ") and state["mode"] == "normal":
+            await message.channel.send(addition.materialAdd(message.content[4:],userName))
+        if state["mode"] == "theoreticalAddition":
             await message.channel.send(addition.theoretical(message.content,userName))
-        elif state["mode"] == "normal" and message.content.startswith("!ND "):
+        if state["mode"] == "normal" and message.content.startswith("!ND "):
             await message.channel.send(delletion.numeric(message.content[4:],userName))
-        elif state["mode"] == "normal" and message.content.startswith("!TD "):
+        if state["mode"] == "normal" and message.content.startswith("!MD "):
+            await message.channel.send(delletion.materialDel(message.content[4:],userName))
+        if state["mode"] == "normal" and message.content.startswith("!TD "):
             await message.channel.send(delletion.theoretical(message.content[4:],userName))
+        #listing must have a separated if block
+        if message.content.startswith("!ListAll") and state["mode"] == "normal":
+            for line in fileHandler.listProblems(userName):
+                await message.channel.send(line)
+            time.sleep(2)
+            for line in fileHandler.listMaterials(userName):
+                await message.channel.send(line)
+        elif message.content.startswith("!ListM") and state["mode"] == "normal":
+            for line in fileHandler.listMaterials(userName):
+                await message.channel.send(line)
+        elif message.content.startswith("!List") and state["mode"] == "normal":
+            # liste os exercícios incompletos
+            for line in fileHandler.listUnfinishedProblems(userName):
+                await message.channel.send(line)
         print(userName)
 
     client.run(settings.DISCORD_API_SECRET)

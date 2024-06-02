@@ -2,6 +2,7 @@
 import json
 import os
 import time
+import utilities
 
 
 def basicFiles():
@@ -16,18 +17,67 @@ def basicFiles():
         print("initialyzer:adminData already there")
     file = open(".spacedRepetition/adminData/userStates.json", "a", encoding="utf-8")
     file.close()
-
-
-
+    file = open(".spacedRepetition/adminData/userVars.json", "a", encoding="utf-8")
+    file.close()
+def getMaterials(userName):
+    file=open(".spacedRepetition/" + userName + "_materials_.json", "r", encoding="utf-8")
+    materialString=file.read()
+    file.close()
+    return json.loads(materialString)
+def saveMaterials(materials,userName):
+    file=open(".spacedRepetition/" + userName + "_materials_.json", "w", encoding="utf-8")
+    materialString=json.dumps(materials)
+    file.write(materialString)
+    file.close()
+def addMaterial(name,chapterNames,exercisePerChapter,userName):
+    materials=getMaterials(userName)
+    materials.append({
+        "name":name,
+        "chapterNames":chapterNames,
+        "exercisePerChapter":exercisePerChapter,
+        "lastOpened":[]
+    })
+    for exercise in exercisePerChapter:
+        materials[-1]["lastOpened"].append(time.time())
+    saveMaterials(materials,userName)
+def deleteMaterials(materialName,userName):
+    materials=getMaterials(userName)
+    for ind in range(len(materials)):
+        if materials[ind]["name"]==materialName:
+            materials.pop(ind)
+            saveMaterials(materials,userName)
+            return
+def materialExists(materialName,userName):
+    materials=getMaterials(userName)
+    for index in range(len(materials)):
+        if materials[index]["name"]==materialName:
+            return True
+    return False
+def listMaterials(userName):
+    materials=getMaterials(userName)
+    currentTime=time.time()
+    messagesToSend=["***materials:"]
+    messagePH=""
+    for index in range(len(materials)):
+        messagePH="---"+materials[index]["name"]+"\n"
+        for chapter in range(len(materials)):
+            messagePH+="-*"+materials[index]["chapterNames"][chapter]
+            messagePH+="@"+str(materials[index]["exercisePerChapter"][chapter])+"problems"
+            messagePH+="@"+str(utilities.dayDifference(materials[index]["lastOpened"][chapter],currentTime))+"days"
+            messagePH+="\n"
+        messagesToSend.append(messagePH)
+    return messagesToSend
 def getProblems(userName):
     file=open(".spacedRepetition/" + userName + ".json", "r", encoding="utf-8")
     problems = file.read()
+    file.close()
     return json.loads(problems)
 
 def saveProblems(problems, userName):
     jsonString = json.dumps(problems, indent=4)
     file=open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8")
     file.write(jsonString)
+    file.close()
 def addNumericProblem(question, answer, significantFigure, problems, userName):
     problems["numeric"].append(
         {
@@ -140,38 +190,63 @@ def getHelp():
 def getUserState(userName):
     file=open(".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8")
     states = json.loads(file.read())
+    file.close()
     return states[userName]
-
-
+def getUserVars(userName):
+    file=open(".spacedRepetition/adminData/userVars.json", "r", encoding="utf-8")
+    vars = json.loads(file.read())
+    file.close()
+    return vars[userName]
 def setUserState(state, userName):
-    file=open( ".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8")
+    file=open(".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8")
     states = json.loads(file.read())
     states[userName] = state
     jsonString = json.dumps(states, indent=4)
+    file.close
     file=open( ".spacedRepetition/adminData/userStates.json", "w", encoding="utf-8")
     file.write(jsonString)
+    file.close()
+def setUserVars(variables, userName):
+    file=open( ".spacedRepetition/adminData/userVars.json", "r", encoding="utf-8")
+    vars = json.loads(file.read())
+    vars[userName] = variables
+    jsonString = json.dumps(vars, indent=4)
+    file.close
+    file=open( ".spacedRepetition/adminData/userVars.json", "w", encoding="utf-8")
+    file.write(jsonString)
+    file.close()
 def addUser(userName):
     file = open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8")
     jsonString=json.dumps({'theoretical':[],'numeric':[]})
     file.write(jsonString)
     file.close()
-    with open(
-        ".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8"
-    ) as file:
-        states = json.loads(file.read())
+    file=open(".spacedRepetition/" + userName + "_materials_.json", "w", encoding="utf-8")
+    jsonString=json.dumps([])
+    file.write(jsonString)
+    file.close()
+    file=open( ".spacedRepetition/adminData/userStates.json", "r", encoding="utf-8") 
+    states = json.loads(file.read())
     states[userName] = {"mode": "normal"}
     jsonString = json.dumps(states, indent=4)
-    with open(
-        ".spacedRepetition/adminData/userStates.json", "w", encoding="utf-8"
-    ) as file:
-        file.write(jsonString)
+    file.close()
+    file=open( ".spacedRepetition/adminData/userStates.json", "w", encoding="utf-8")
+    file.write(jsonString)
+    file.close()
+    file=open( ".spacedRepetition/adminData/userVars.json", "r", encoding="utf-8") 
+    vars = json.loads(file.read())
+    vars[userName]={"lastRandomized":0,"randomizedString":""}
+    jsonString = json.dumps(vars, indent=4)
+    file.close()
+    file=open( ".spacedRepetition/adminData/userVars.json", "w", encoding="utf-8")
+    file.write(jsonString)
+    file.close()
 def userExists(userName):
     file=open(".spacedRepetition/adminData/userStates.json",encoding='utf-8')
-    states = json.load(file)
+    jsonText=file.read()
+    states = json.loads(jsonText)
+    file.close()
     for name in states.keys():
         if name == userName:
-            file.close()
             return True
-    file.close()
     return False
 basicFiles()
