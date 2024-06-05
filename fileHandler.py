@@ -60,7 +60,7 @@ def listMaterials(userName):
     messagePH=""
     for index in range(len(materials)):
         messagePH="---"+materials[index]["name"]+"\n"
-        for chapter in range(len(materials)):
+        for chapter in range(len(materials[index]["chapterNames"])):
             messagePH+="-*"+materials[index]["chapterNames"][chapter]
             messagePH+="@"+str(materials[index]["exercisePerChapter"][chapter])+"problems"
             messagePH+="@"+str(utilities.dayDifference(materials[index]["lastOpened"][chapter],currentTime))+"days"

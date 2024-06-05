@@ -27,7 +27,6 @@ def run():
     @client.event
     async def on_message(message):  # receba uma mensagem do discord
         userName = str(message.author)[1:]
-
         if message.author == client.user:
             return
         elif not fileHandler.userExists(userName):
@@ -41,21 +40,21 @@ def run():
             state={'mode':'normal'}
             fileHandler.setUserState(state,userName)
             await message.channel.send("```ansi\n\u001b[0;31mCanceled\u001b[0m\n```")
-        if message.content.startswith("!Help") and state["mode"] == "normal":
+        elif message.content.startswith("!Help") and state["mode"] == "normal":
             await message.channel.send(fileHandler.getHelp())
-        if (
+        elif (
             message.content.startswith("!Exercise") and state["mode"] == "normal"
         ):
             await message.channel.send(problemHandler.findQuestion(userName))
-        if state["mode"] == "numeric":
+        elif state["mode"] == "numeric":
             await message.channel.send(problemHandler.numeric(message.content,userName))
             await message.channel.send(problemHandler.findQuestion(userName))
-        if state["mode"] == "theoreticalWaiting":
+        elif state["mode"] == "theoreticalWaiting":
             await message.channel.send(problemHandler.theoreticalWaiting(userName))
-        if state["mode"] == "theoretical":
+        elif state["mode"] == "theoretical":
             await message.channel.send(problemHandler.theoretical(message.content,userName))
             await message.channel.send(problemHandler.findQuestion(userName))
-        if message.content.startswith("!NA ") and state["mode"] == "normal":
+        elif message.content.startswith("!NA ") and state["mode"] == "normal":
             state = {
                 "mode": "numericAddition",
                 "problem": {
@@ -68,9 +67,9 @@ def run():
             }
             fileHandler.setUserState(state,userName)
             await message.channel.send("What is the numeric answer?")
-        if state["mode"] == "numericAddition":
+        elif state["mode"] == "numericAddition":
             await message.channel.send(addition.numeric(message.content,userName))
-        if message.content.startswith("!TA ") and state["mode"] == "normal":
+        elif message.content.startswith("!TA ") and state["mode"] == "normal":
             state = {
                 "mode": "theoreticalAddition",
                 "problem": {
@@ -83,15 +82,15 @@ def run():
             }
             fileHandler.setUserState(state,userName)
             await message.channel.send("What is the theoretical answer?")
-        if message.content.startswith("!MA ") and state["mode"] == "normal":
+        elif message.content.startswith("!MA ") and state["mode"] == "normal":
             await message.channel.send(addition.materialAdd(message.content[4:],userName))
-        if state["mode"] == "theoreticalAddition":
+        elif state["mode"] == "theoreticalAddition":
             await message.channel.send(addition.theoretical(message.content,userName))
-        if state["mode"] == "normal" and message.content.startswith("!ND "):
+        elif state["mode"] == "normal" and message.content.startswith("!ND "):
             await message.channel.send(delletion.numeric(message.content[4:],userName))
-        if state["mode"] == "normal" and message.content.startswith("!MD "):
+        elif state["mode"] == "normal" and message.content.startswith("!MD "):
             await message.channel.send(delletion.materialDel(message.content[4:],userName))
-        if state["mode"] == "normal" and message.content.startswith("!TD "):
+        elif state["mode"] == "normal" and message.content.startswith("!TD "):
             await message.channel.send(delletion.theoretical(message.content[4:],userName))
         #listing must have a separated if block
         if message.content.startswith("!ListAll") and state["mode"] == "normal":

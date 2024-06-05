@@ -39,6 +39,8 @@ def materialAdd(answer,userName):
     formated=answer.split("@")
     chapterNames=[]
     problemsPerChapter=[]
+    if fileHandler.materialExists(formated[0],userName):
+        return fileHandler.materialExists
     if len(formated)%2==0:
         return"Add a valid answer name@chapter name@exercise number@chapter name@exercise number@..."
     for index in range(len(formated)):
