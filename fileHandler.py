@@ -3,6 +3,9 @@ import json
 import os
 import time
 import utilities
+import requests
+import uuid
+import shutil
 
 
 def basicFiles():
@@ -13,6 +16,10 @@ def basicFiles():
         print("initialyzer:.spacedRepetition already there")
     try:
         os.mkdir(".spacedRepetition/adminData")
+    except:
+        print("initialyzer:adminData already there")
+    try:
+        os.mkdir(".spacedRepetition/images")
     except:
         print("initialyzer:adminData already there")
     file = open(".spacedRepetition/adminData/userStates.json", "a", encoding="utf-8")
@@ -78,28 +85,11 @@ def saveProblems(problems, userName):
     file=open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8")
     file.write(jsonString)
     file.close()
-def addNumericProblem(question, answer, significantFigure, problems, userName):
-    problems["numeric"].append(
+
+def addProblem(question, answer, problems,imagePath,userName):
+    problems.append(
         {
-            "question": question,
-            "box": 0,
-            "answer": float(answer),
-            "significantFigures": int(significantFigure),
-            "lastOpened": int(time.time()),
-            "errors": 0,
-        }
-    )
-    saveProblems(problems, userName)
-
-
-def deleteNumericProblem(index, problems, userName):
-    problems["numeric"].pop(index)
-    saveProblems(problems, userName)
-
-
-def addTheoreticalProblem(question, answer, problems, userName):
-    problems["theoretical"].append(
-        {
+            "image":imagePath,
             "question": question,
             "box": 0,
             "answer": answer,
@@ -110,26 +100,17 @@ def addTheoreticalProblem(question, answer, problems, userName):
     saveProblems(problems, userName)
 
 
-def deleteTheoreticalExercise(index, problems, userName):
-    problems["theoretical"].pop(index)
+def deleteProblem(index, problems, userName):
+    problems.pop(index)
     saveProblems(problems, userName)
 
 
 def listProblems(userName):
     problems = getProblems(userName)
-    listOfProblems = ["Numeric problems:"]
-    for index in range(len(problems["numeric"])):
-        problem = problems["numeric"][index]
-        listOfProblems.append(
-            +problem["question"]
-            + "-box:"
-            + str(problem["box"])
-            + "-errors:"
-            + str(problem["errors"])
-        )
-    listOfProblems.append("Theoretical problems:")
-    for index in range(len(problems["theoretical"])):
-        problem = problems["theoretical"][index]
+    listOfProblems=[]
+    listOfProblems.append("Problems:")
+    for index in range(len(problems)):
+        problem = problems[index]
         listOfProblems.append(
             str(index)
             + "-"
@@ -139,30 +120,19 @@ def listProblems(userName):
             + "-errors:"
             + str(problem["errors"])
         )
+        images.append(problems["image"])
     listOfProblems.append("All problems have been listed.")
-    return listOfProblems
+    return {"messages":listOfProblems,"images":images}
 
 
 def listUnfinishedProblems(userName):
     problems = getProblems(userName)
-    listOfProblems = ["Numeric problems:"]
-    counter = 0
-    for index in range(len(problems["numeric"])):
-        problem = problems["numeric"][index]
-        if problem["box"] < 4:
-            listOfProblems.append(
-                str(index)
-                + "-"
-                + problem["question"]
-                + "-box:"
-                + str(problem["box"])
-                + "-errors:"
-                + str(problem["errors"])
-            )
-            counter += 1
-    listOfProblems.append("Theoretical problems:")
-    for index in range(len(problems["theoretical"])):
-        problem = problems["theoretical"][index]
+    listOfProblems=[]
+    images=[]
+    counter=0
+    listOfProblems.append("Problems:")
+    for index in range(len(problems)):
+        problem = problems[index]
         if problem["box"] < 4:
             listOfProblems.append(
                 str(index)
@@ -173,11 +143,12 @@ def listUnfinishedProblems(userName):
                 + "-erros:"
                 + str(problem["errors"])
             )
+            images.append(problems["image"])
             counter += 1
     listOfProblems.append(
         "All problems have been listed.-" + str(counter) + " unfinished problems."
     )
-    return listOfProblems
+    return {"messages":listOfProblems,"images":images}
 
 
 def getHelp():
@@ -217,7 +188,7 @@ def setUserVars(variables, userName):
     file.close()
 def addUser(userName):
     file = open(".spacedRepetition/" + userName + ".json", "w", encoding="utf-8")
-    jsonString=json.dumps({'theoretical':[],'numeric':[]})
+    jsonString=json.dumps([])
     file.write(jsonString)
     file.close()
     file=open(".spacedRepetition/" + userName + "_materials_.json", "w", encoding="utf-8")
@@ -249,4 +220,11 @@ def userExists(userName):
         if name == userName:
             return True
     return False
+def saveImg(url,userName):
+    r=requests.get(url,stream=True)
+    path="./.spacedRepetition/images/"+userName+str(uuid.uuid4())+".jpg"
+    with open(path,'wb') as outFile:
+        print("image gotten")
+        shutil.copyfileobj(r.raw,outFile)
+    return path
 basicFiles()

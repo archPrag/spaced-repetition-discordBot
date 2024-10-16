@@ -45,36 +45,28 @@ def run():
         elif (
             message.content.startswith("!Exercise") and state["mode"] == "normal"
         ):
+            dataTS=problemHandler.findQuestion(userName)
+            if dataTS["image"]=="none":
+                await message.channel.send(dataTS["message"])
+            else:
+                await message.channel.send(dataTS["message"],file=discord.File(dataTS["image"]))
+        elif state["mode"] == "waiting":
+            await message.channel.send(problemHandler.waiting(userName))
+        elif state["mode"] == "problem":
+            await message.channel.send(problemHandler.problemEnd(message.content,userName))
             await message.channel.send(problemHandler.findQuestion(userName))
-        elif state["mode"] == "numeric":
-            await message.channel.send(problemHandler.numeric(message.content,userName))
-            await message.channel.send(problemHandler.findQuestion(userName))
-        elif state["mode"] == "theoreticalWaiting":
-            await message.channel.send(problemHandler.theoreticalWaiting(userName))
-        elif state["mode"] == "theoretical":
-            await message.channel.send(problemHandler.theoretical(message.content,userName))
-            await message.channel.send(problemHandler.findQuestion(userName))
-        elif message.content.startswith("!NA ") and state["mode"] == "normal":
+        elif message.content.startswith("!PA ") and state["mode"] == "normal":
+            if len(message.attachments)==0:
+                path="none"
+            else:
+                url=message.attachments[0].url
+                path=fileHandler.saveImg(url,userName)
+            print("url path gotten")
             state = {
-                "mode": "numericAddition",
+                "mode": "addition",
                 "problem": {
                     "question": message.content[4:],
-                    "answer": 0,
-                    "lastOpened": 0,
-                    "box": 0,
-                    "error": 0,
-                },
-            }
-            fileHandler.setUserState(state,userName)
-            await message.channel.send("What is the numeric answer?")
-        elif state["mode"] == "numericAddition":
-            await message.channel.send(addition.numeric(message.content,userName))
-        elif message.content.startswith("!TA ") and state["mode"] == "normal":
-            state = {
-                "mode": "theoreticalAddition",
-                "problem": {
-                    "question": message.content[4:],
-                    "answer": "",
+                    "imagePath": path,
                     "lastOpened": 0,
                     "box": 0,
                     "error": 0,
@@ -84,29 +76,29 @@ def run():
             await message.channel.send("What is the theoretical answer?")
         elif message.content.startswith("!MA ") and state["mode"] == "normal":
             await message.channel.send(addition.materialAdd(message.content[4:],userName))
-        elif state["mode"] == "theoreticalAddition":
-            await message.channel.send(addition.theoretical(message.content,userName))
-        elif state["mode"] == "normal" and message.content.startswith("!ND "):
-            await message.channel.send(delletion.numeric(message.content[4:],userName))
+        elif state["mode"] == "addition":
+            await message.channel.send(addition.problem(message.content,userName))
         elif state["mode"] == "normal" and message.content.startswith("!MD "):
             await message.channel.send(delletion.materialDel(message.content[4:],userName))
-        elif state["mode"] == "normal" and message.content.startswith("!TD "):
-            await message.channel.send(delletion.theoretical(message.content[4:],userName))
+        elif state["mode"] == "normal" and message.content.startswith("!PD "):
+            await message.channel.send(delletion.problemDel(message.content[4:],userName))
         #listing must have a separated if block
-        if message.content.startswith("!ListAll") and state["mode"] == "normal":
+        if message.content.startswith("!LAP") and state["mode"] == "normal":
             for line in fileHandler.listProblems(userName):
                 await message.channel.send(line)
             time.sleep(2)
             for line in fileHandler.listMaterials(userName):
                 await message.channel.send(line)
-        elif message.content.startswith("!ListM") and state["mode"] == "normal":
+        elif message.content.startswith("!LM") and state["mode"] == "normal":
             for line in fileHandler.listMaterials(userName):
                 await message.channel.send(line)
-        elif message.content.startswith("!List") and state["mode"] == "normal":
-            # liste os exercícios incompletos
+        elif message.content.startswith("!LP") and state["mode"] == "normal":
+            # list unfinished problems
             for line in fileHandler.listUnfinishedProblems(userName):
                 await message.channel.send(line)
         print(userName)
+        print(message.attachments)
+        print(message.content)
 
     client.run(settings.DISCORD_API_SECRET)
 

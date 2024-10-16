@@ -5,7 +5,6 @@ import materials
 
 numberOfBoxes=4
 basicDivision=[1,2,4,7]
-numericalColorCode = ["\u001b[0;30m", "\u001b[0;32m", "\u001b[2;33m", "\u001b[0;34m"]
 theoreticalColorCode = ["\u001b[1;30m", "\u001b[1;32m", "\u001b[1;33m", "\u001b[0;34m"]
 boxNames = ["zero", "one", "two", "three"]
 
@@ -22,7 +21,6 @@ def findQuestion(userName):
     problems = fileHandler.getProblems(userName)
     variables=fileHandler.getUserVars(userName)
     stringRandom=variables["randomizedString"]
-    numericProblems = problems["numeric"]
     print("Get question:" + str(problems))
     if numberOfBoxes<=len(basicDivision):
         for index in range(numberOfBoxes):
@@ -33,54 +31,32 @@ def findQuestion(userName):
             numberOfWaitingDays.append(basicDivision[-1]*(index-len(basicDivision)+1))
     for box in range(numberOfBoxes):
         print("Get exercises:box" + str(box))
-        for index in range(len(numericProblems)):
-            print("Get questions: exercise" + str(index))
-            if numericProblems[index]["box"] == box and numberOfWaitingDays[ box ] <= utilities.dayDifference(numericProblems[index]["lastOpened"], time.time()):
-                print("Get questions: chosen exercise " + str(numericProblems[index]))
-                fileHandler.setUserState(
-                    {
-                        "problem": numericProblems[index],
-                        "index": index,
-                        "mode": "numeric",
-                    },
-                    userName,
-                )
-                return (
-                    "```ansi\n "
-                    + numericalColorCode[box]
-                    + "Numeric box "
-                    + boxNames[box]
-                    + "\n(numeric problem "+str(index)+")"
-                    + numericProblems[index]["question"]
-                    + ".\u001b[0m\n```"
-                )
-        theoreticalProblems = problems["theoretical"]
-        for index in range(len(theoreticalProblems)):
+        for index in range(len(problems)):
             print("get questions: exercise" + str(index))
-            if theoreticalProblems[index]["box"] == box and numberOfWaitingDays[
+            if problems[index]["box"] == box and numberOfWaitingDays[
                 box
             ] <= utilities.dayDifference(
-                theoreticalProblems[index]["lastOpened"], time.time()
+                problems[index]["lastOpened"], time.time()
             ):
                 fileHandler.setUserState(
                     {
-                        "problem": theoreticalProblems[index],
+                        "problem": problems[index],
                         "index": index,
-                        "mode": "theoreticalWaiting",
+                        "mode": "waiting",
                     },
                     userName,
                 )
-                print("Get questions: chosen exercise " + str(theoreticalProblems[index]))
-                return (
-                    "```ansi\n "
+                print("Get questions: chosen exercise " + str(problems[index]))
+                return {"message":"```ansi\n "
                     + theoreticalColorCode[box]
-                    + "Theoretical box "
+                    + "box "
                     + boxNames[box]
-                    + "\n (theoretical problem "+str(index)+")"
-                    + theoreticalProblems[index]["question"]
+                    + "\n (problem "+str(index)+")"
+                    + problems[index]["question"]
                     + "\n(Send any question to continue)"
-                    + ".\u001b[0m\n```"
-                )
+                    + ".\u001b[0m\n```",
+                    "image":problems[index]["image"]
+                    }
     # Now try in the next box:
     print("Get questions: Box 4 reached")
     if utilities.dayDifference(variables["lastRandomized"],time.time())>=1:
@@ -90,12 +66,11 @@ def findQuestion(userName):
         fileHandler.setUserVars(variables,userName)
     return stringRandom
 
-
-def theoreticalWaiting(userName):
+def waiting(userName):
     # Get dependencies
     state = fileHandler.getUserState(userName)
     print("Theoretical waiting: the waiting is over.")
-    state["mode"] = "theoretical"
+    state["mode"] = "problem"
     fileHandler.setUserState(state, userName)
     return (
         "The answer was: \n"
@@ -108,28 +83,28 @@ def safelyDecreaseBox(initialBox):
     return initialBox - 1 + int(initialBox == 0)
 
 
-def theoretical(answer, userName):
+def problemEnd(answer, userName):
     # get dependencies
     state = fileHandler.getUserState(userName)
     problems = fileHandler.getProblems(userName)
     # Apply exercise
-    print("theoretical: Did User get it right?" + answer)
+    print("problem: Did User get it right?" + answer)
     index = state["index"]
-    problems["theoretical"][index]["lastOpened"] = int(time.time())
+    problems[index]["lastOpened"] = int(time.time())
     answer = answer.lower()
     if answer.startswith("y"):
-        problems["theoretical"][index]["box"] += 1
-        print("theoretical:" + str(problems))
+        problems[index]["box"] += 1
+        print("problem:" + str(problems))
         fileHandler.saveProblems(problems, userName)
         state = {"mode": "normal"}
         fileHandler.setUserState(state, userName)
         return "Congratulations, you got it right!!!"
     elif answer.startswith("n"):
-        problems["theoretical"][index]["box"] = safelyDecreaseBox(
-            problems["theoretical"][index]["box"]
+        problems[index]["box"] = safelyDecreaseBox(
+            problems[index]["box"]
         )
-        problems["theoretical"][index]["errors"] += 1
-        print("theoretical:" + str(problems))
+        problems[index]["errors"] += 1
+        print("problem:" + str(problems))
         fileHandler.saveProblems(problems, userName)
         state = {"mode": "normal"}
         fileHandler.setUserState(state, userName)
@@ -138,37 +113,3 @@ def theoretical(answer, userName):
     return "Input a valid answer 'y' or 'n'"
 
 
-def numeric(answer, userName):
-    print("Numeric:answer" + answer)
-    if not utilities.floatStringCheck(answer):
-        print("Numeric: invalid non numeric input")
-        return "Add a numeric answer"
-    number = float(answer)
-    state = fileHandler.getUserState(userName)
-    problems = fileHandler.getProblems(userName)
-    print("Numeric:" + str(problems))
-    index = state["index"]
-    problems["numeric"][index]["lastOpened"] = int(time.time())
-    if utilities.compareValues(
-        state["problem"]["answer"],
-        number,
-        state["problem"]["significantFigures"],
-    ):
-        problems["numeric"][index]["box"] += 1
-        print("Numeric:" + str(problems))
-        fileHandler.saveProblems(problems, userName)
-        state = {"mode": "normal"}
-        fileHandler.setUserState(state, userName)
-        return "Congratulations, you got it right!!!"
-    problems["numeric"][index]["box"] = safelyDecreaseBox(
-        problems["numeric"][index]["box"]
-    )
-    problems["numeric"][index]["errors"] += 1
-    state = {"mode": "normal"}
-    fileHandler.saveProblems(problems,userName)
-    fileHandler.setUserState(state, userName)
-    return (
-        "Unfortunately you missed, the answer was "
-        + str(problems['numeric'][index]['answer'])
-        + ". Better luck next time!"
-    )
